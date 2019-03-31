@@ -64,6 +64,7 @@ void setup() {
   Serial.begin(115200);  //初始化波特率
   delay(1000);
   LobotSerialServoSetID(Serial, 254, 1);   //设置所有舵机为1号舵机
+  //LobotSerialServoSetID(Serial, 254, 2);   //设置所有舵机为1号舵机
   delay(1000);
 }
 

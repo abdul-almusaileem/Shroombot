@@ -1,6 +1,6 @@
 #include <ServoLX.h>
 
-int rx = 9;
+int rx = 8;
 int tx = 7;
 
 ServoLX servo(rx, tx);
@@ -23,18 +23,19 @@ void setup()
 void loop()
 {
     id = 1;
-    id -= '0' + 0x0;
     servo.setid(id);
-    servo.enable(id);
-    Serial.println(servo.getid());
-    int pos = servo.position_raw(id);
+    servo.enable();
+    //int pos = servo.position_raw(id);
 	//Serial.println(pos);
 
   //servo.position_raw(id);
 
-  //servo.move(id, 500);
+  servo.move(id, 10.3);
+  servo.start();
 
-  //servo.start();
+  servo.move_raw(id, 500);
+  servo.start();
 
+  Serial.println("nothing yet...");
   delay(1000);
 }
