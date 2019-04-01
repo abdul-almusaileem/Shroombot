@@ -11,6 +11,7 @@ void setup()
 {
  // activate the motor serial connection
  //
+ //
  servo.begin();
  Serial.begin(115200);
 
