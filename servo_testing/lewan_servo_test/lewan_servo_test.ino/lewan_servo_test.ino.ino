@@ -34,18 +34,27 @@
 #define NUM_SERVOS 4
 
 
+int servo_1_pin = 2;
+int servo_2_pin = 4;
+int servo_3_pin = 6;
+int servo_4_pin = 8;
+
 // creatte the SoftwareSerial objects
 // SoftwareSerial serial(Tx, Rx)
 // we are using the Rx pins
 //
-SoftwareSerial servo_1(1, 2);
-SoftwareSerial servo_2(3, 4);
-SoftwareSerial servo_3(5, 6);
-SoftwareSerial servo_4(7, 8);
+SoftwareSerial servo_1(1, servo_1_pin);
+SoftwareSerial servo_2(3, servo_2_pin);
+SoftwareSerial servo_3(5, servo_3_pin);
+SoftwareSerial servo_4(7, servo_4_pin);
 
 // create an array of servos
 //
 SoftwareSerial servos[NUM_SERVOS] = {servo_1, servo_2, servo_3, servo_4};
+
+// mid point array
+//
+int16_t mid_points[NUM_SERVOS] = {450, 450, 675, 275};
 
 // input values to move the servos
 //
@@ -73,9 +82,17 @@ void setup() {
     // TODO: delete this and just use the servos_begin
     //
     servo_1.begin(115200);
+    //delay(1000);
+
     servo_2.begin(115200);
+    //delay(1000);
+
     servo_3.begin(115200);
+    //delay(1000);
+
     servo_4.begin(115200);
+    //delay(1000);
+
     servo_set_id(servo_1, 254, 1);
     servo_set_id(servo_2, 254, 1);
     servo_set_id(servo_3, 254, 1);
@@ -90,6 +107,7 @@ void setup() {
 
 void loop() {
 
+    /*
     while (Serial.available()) {
         // read which servo and what position to move it
         //
@@ -124,13 +142,63 @@ void loop() {
                 Serial.println("Undeclared Servo");
                 continue;
         }
-        delay(2000);
+
+
     }
+    */
+
+
+
+
+        servo_move(servo_1, 1, 1000, 1000);
+        delay(2000);
+        servo_move(servo_2, 1, 1000, 1000);
+        delay(2000);
+        servo_move(servo_3, 1, 1000, 1000);
+        delay(2000);
+        servo_move(servo_4, 1, 1000, 1000);
+        delay(2000);
+
+        servo_move(servo_1, 1, 500, 1000);
+        delay(2000);
+
+
+        servo_move(servo_1, 1, 0, 1000);
+        delay(2000);
+        servo_move(servo_2, 1, 0, 1000);
+        delay(2000);
+        servo_move(servo_3, 1, 0, 1000);
+        delay(2000);
+        servo_move(servo_4, 1, 0, 1000);
+        delay(2000);
+
+    /*
+        //
+        for(int i = 0; i < 4; i++) {
+            servo_move(servos[i], 1, 0, 1000);
+            delay(2000);
+        }
+
+
+    for(int i = 0; i < 4; i++) {
+            servo_move(servos[i], 1, 1000, 1000);
+            delay(2000);
+        }
+*/
+/*
+    servo_move(servo_4, 1, 500, 1000);
+    delay(1000);
+    servo_move(servo_4, 1, 0, 1000);
+    delay(1000);
+*/
+
+
 }
 
 
+
 // initialize all the servos that wehave
-// TODO: add led to announce the that the init finished 
+// TODO: add led to announce the that the init finished
 //
 void servos_begin(SoftwareSerial servo[]) {
     for (int i = 0; i < NUM_SERVOS-1; i++) {
