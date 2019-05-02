@@ -1,6 +1,6 @@
 import struct
 import machine
-from time import sleep
+import time as time_mo
 
 
 
@@ -21,9 +21,9 @@ def main():
 
     while True:
         move(motor, id, 1000, 200)
-        sleep(2)
+        time_mo.sleep(2)
         move(motor, id, 0, 200)
-        sleep(2)
+        time_mo.sleep(2)
 
 
 #
@@ -73,6 +73,7 @@ def set_id(motor, ID):
 #
 def move(motor, ID, position, time):
 
+    start = time_mo.time()
     # initialize the packet
     #
     buf = [0] * 10
@@ -109,6 +110,10 @@ def move(motor, ID, position, time):
     #
     for i in range(0, len(buf)):
         motor.write(buf[i])
+
+    end = time_mo.time()
+
+    print(end - start)
 
 
 # calculate the checksum for the packet
