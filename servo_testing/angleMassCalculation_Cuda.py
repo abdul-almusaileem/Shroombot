@@ -1,7 +1,7 @@
 ##############################################################
 #   Libraries
 ##############################################################
-from numba import cuda
+#from numba import cuda
 import math
 import numpy as np
 import time
@@ -12,6 +12,7 @@ import array
 ##############################################################
 #   Variable Definition
 ##############################################################
+
 DESIRED_HEIGHT = 10  # Centimeters
 DESIRED_REACH = 10  # Centimeters
 L1 = 10  # Humerus Length in Centimeters
@@ -28,7 +29,9 @@ COMBO_RESULT = []  # Empty Space for Result
 ##############################################################
 #   Function Prototype
 ##############################################################
+
 # Generating a list based on boundaries and differences
+#
 def array_generator(low_end, high_end, gap):
     result_list = []
     attach_value = low_end
@@ -38,8 +41,9 @@ def array_generator(low_end, high_end, gap):
     result_array = np.array([result_list])
     return result_array
 
-
-@cuda.jit(nopython=True, parallel=True)
+# why use cuda if we're using a Pi
+#
+#@cuda.jit(nopython=True, parallel=True)
 def cal_kernel(input_array):
     # Establish Variables
     low_end = input_array[0]
