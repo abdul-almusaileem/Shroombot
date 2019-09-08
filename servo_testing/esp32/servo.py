@@ -21,7 +21,7 @@ class Servo:
     
     # this method takes an ID
     # to get the degree mult position with 0.24
-    # to get the position from the degrees  devide it  0.24 
+    # to get the position from the degrees  divide it  0.24 
     #
     def move(self, ID, position, time):
         start = time_mo.time()
