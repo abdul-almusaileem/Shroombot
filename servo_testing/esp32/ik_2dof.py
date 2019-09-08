@@ -31,3 +31,6 @@ theta2_deg = rad2deg(theta2)
 
 print("theta1: {}".format(theta1_deg))
 print("theta2: {}".format(theta2_deg)) 
+
+print("first servo put: {}".format(theta1_deg * 0.24))
+print("second servo put: {}".format(theta2_deg * 0.24))
