@@ -105,7 +105,7 @@ class Servo:
     
     
     def center(self, ID):
-        self.move(ID, 500, 0)
+        self.move(ID, 500, 500)
     
     
     #---------------------- PRIVATE METHODS -------------------------------
