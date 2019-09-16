@@ -8,11 +8,11 @@ from servo import Servo as servo
 # class as a struct for joint names
 #
 class Joints():
-    self.base = 0
-    self.lower_elbow = 1
-    self.higher_elbow = 2
-    self.mid_arm = 3
-    self.wrist = 4
+    base = 0
+    lower_elbow = 1
+    higher_elbow = 2
+    mid_arm = 3
+    wrist = 4
     
     
     
@@ -39,7 +39,7 @@ class Arm():
     #
     def __init__(self):
         pass
-        self.IDLE()
+        #self.IDLE()
     
     
     #
@@ -47,6 +47,11 @@ class Arm():
     def IDLE(self):
         pass
         print("put the arm into idle position...")
+        self.CONNECTION.center(self.JOINTS.lower_elbow)
+        self.CONNECTION.center(self.JOINTS.wrist)
+        self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 200)
+        self.CONNECTION.move(self.JOINTS.mid_arm, 900, 200)
+        
     
     #
     #
@@ -54,7 +59,6 @@ class Arm():
         pass
         print("math ? or maybe just move to")
  
-    def 
     
     def pick(self):
         pass
@@ -63,8 +67,8 @@ class Arm():
         pass    
     
     
-    def demo(self)
+    def demo(self):
         pass 
-       self.CONNECTION.move(self.JOINTS.wrist, 100, 100)
+        self.CONNECTION.move(self.JOINTS.wrist, 100, 100)
     
     
