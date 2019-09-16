@@ -5,6 +5,7 @@
 from servo import Servo as servo
 
 
+
 # class as a struct for joint names
 #
 class Joints():
@@ -49,8 +50,8 @@ class Arm():
         print("put the arm into idle position...")
         self.CONNECTION.center(self.JOINTS.lower_elbow)
         self.CONNECTION.center(self.JOINTS.wrist)
-        self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 200)
-        self.CONNECTION.move(self.JOINTS.mid_arm, 900, 200)
+        self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 500)
+        self.CONNECTION.move(self.JOINTS.mid_arm, 900, 500)
         
     
     #
@@ -69,6 +70,11 @@ class Arm():
     
     def demo(self):
         pass 
-        self.CONNECTION.move(self.JOINTS.wrist, 100, 100)
-    
+        self.CONNECTION.move(self.JOINTS.higher_elbow, 0, 500)
+        self.CONNECTION.move(self.JOINTS.mid_arm, 500,  500)
+        self.CONNECTION.move(self.JOINTS.wrist, 650, 500)
+        
+        # TODO: add delay and then IDLE
+        # 
+        
     
