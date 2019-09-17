@@ -3,6 +3,7 @@
 #
 
 from servo import Servo as servo
+from time import sleep
 
 
 
@@ -49,9 +50,10 @@ class Arm():
         pass
         print("put the arm into idle position...")
         self.CONNECTION.center(self.JOINTS.lower_elbow)
-        self.CONNECTION.center(self.JOINTS.wrist)
         self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 500)
         self.CONNECTION.move(self.JOINTS.mid_arm, 900, 500)
+        self.CONNECTION.center(self.JOINTS.wrist)
+
         
     
     #
@@ -71,10 +73,30 @@ class Arm():
     def demo(self):
         pass 
         self.CONNECTION.move(self.JOINTS.higher_elbow, 0, 500)
-        self.CONNECTION.move(self.JOINTS.mid_arm, 500,  500)
-        self.CONNECTION.move(self.JOINTS.wrist, 650, 500)
+        self.CONNECTION.move(self.JOINTS.mid_arm, 600,  500)
+        self.CONNECTION.move(self.JOINTS.wrist, 700, 500)
+        sleep(2)
         
-        # TODO: add delay and then IDLE
-        # 
+        self.IDLE()
+        sleep(2)
+
+        self.CONNECTION.move(self.JOINTS.higher_elbow, 300, 500)
+        self.CONNECTION.move(self.JOINTS.mid_arm, 500,  500)
+        self.CONNECTION.move(self.JOINTS.wrist, 500, 500)
+        sleep(1)
+        
+        self.IDLE()
+        sleep(2)
+        
+        self.CONNECTION.move(self.JOINTS.lower_elbow, 350, 500)
+        self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 500)
+        self.CONNECTION.move(self.JOINTS.mid_arm, 830,  500)
+        self.CONNECTION.move(self.JOINTS.wrist, 550, 500)
+        sleep(2)
+        
+        self.IDLE()  
+        sleep(2)
+
+        
         
     
