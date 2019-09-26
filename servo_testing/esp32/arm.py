@@ -51,6 +51,8 @@ class Arm():
         pass
         print("put the arm into idle position...")
         sleep(0.5)
+        self.CONNECTION.move(self.JOINTS.base, 600, 500)
+        sleep(0.5)
         self.CONNECTION.center(self.JOINTS.lower_elbow)
         sleep(0.5)
         self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 500)
@@ -82,14 +84,17 @@ class Arm():
         pass    
     
 
-    # this method was for demo purposes in the first preitntaion
+    # this method was for demo purposes in the first presintaion
     #
     def demo(self):
         pass 
         self.CONNECTION.move(self.JOINTS.higher_elbow, 0, 500)
         self.CONNECTION.move(self.JOINTS.mid_arm, 600,  500)
         self.CONNECTION.move(self.JOINTS.wrist, 700, 500)
-        sleep(2)
+        self.CONNECTION.move(self.JOINTS.base, 1000, 500)
+        sleep(1)
+        self.CONNECTION.move(self.JOINTS.base, 600, 500)
+        sleep(1)
         
         self.IDLE()
         sleep(2)
@@ -97,6 +102,9 @@ class Arm():
         self.CONNECTION.move(self.JOINTS.higher_elbow, 300, 500)
         self.CONNECTION.move(self.JOINTS.mid_arm, 500,  500)
         self.CONNECTION.move(self.JOINTS.wrist, 500, 500)
+        self.CONNECTION.move(self.JOINTS.base, 1000, 500)
+        sleep(1)
+        self.CONNECTION.move(self.JOINTS.base, 600, 500)
         sleep(1)
         
         self.IDLE()
@@ -106,7 +114,10 @@ class Arm():
         self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 500)
         self.CONNECTION.move(self.JOINTS.mid_arm, 830,  500)
         self.CONNECTION.move(self.JOINTS.wrist, 550, 500)
-        sleep(2)
+        self.CONNECTION.move(self.JOINTS.base, 1000, 500)
+        sleep(1)
+        self.CONNECTION.move(self.JOINTS.base, 600, 500)
+        sleep(1)
         
         self.IDLE()  
         sleep(2)
