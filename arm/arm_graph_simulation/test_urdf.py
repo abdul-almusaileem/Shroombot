@@ -3,10 +3,10 @@ import numpy as np
 from ikpy import plot_utils
 
 
-PATH =  "/Users/Abdul./Desktop/Arm Base Assembly.URDF/urdf/Arm Base Assembly.URDF.urdf"
+PATH =  "/Users/Abdul./Desktop/Arm Base Assembly.SLDASM/urdf/Arm Base Assembly.SLDASM.urdf"
 my_chain = ikpy.chain.Chain.from_urdf_file(PATH)
 
-target_vector = [ 0.1, -0.2, 0.1]
+target_vector = [ 0.01, 0.1, 0.1]
 target_frame = np.eye(4)
 target_frame[:3, 3] = target_vector
 
