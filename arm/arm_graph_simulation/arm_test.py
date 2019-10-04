@@ -41,7 +41,7 @@ arm = Chain(name="arm", links= [
         translation_vector = [0.25 * SCALER, 0, 0], # location
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(0), math.radians(28)) # FIXME: CHECK BOUNDS
+        bounds = (math.radians(0), math.radians(120)) 
         # bounds = (math.radians(-28), math.radians(0))
 
         ),
@@ -51,7 +51,7 @@ arm = Chain(name="arm", links= [
         translation_vector = [0.9 * SCALER, 0, 0], # location
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(144), math.radians(240))
+        bounds = (math.radians(0), math.radians(240))
         # bounds = (math.radians(-144), math.radians(240))
         
         ),
@@ -61,13 +61,13 @@ arm = Chain(name="arm", links= [
         translation_vector = [0.55 * SCALER, 0, 0], # location
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(120), math.radians(216))
+        bounds = (math.radians(120), math.radians(240))
         # bounds = (math.radians(-120), math.radians(216))
         )
      
     # ,URDFLink(
     #     name = "end effector",
-    #     translation_vector = [0.1*10, 0, 0], # location
+    #     translation_vector = [0.1 * SCALER, 0, 0], # location
     #     orientation = [0, 0, 0],
     #     rotation = [0, 1, 0])
 ])
@@ -81,8 +81,8 @@ ax = plot_utils.init_3d_figure()
 # the target point between -1 ~ 1 in all axis 
 # create the 
 #
-x = .0 * SCALER
-y = 3. * SCALER
+x = .3 * SCALER
+y = .3 * SCALER
 z = .0 * SCALER
 target_vector = [x, y, z]
 target_frame = np.eye(4)
@@ -100,11 +100,26 @@ for (i, angle) in enumerate(angles):
 
 arm.plot(arm.inverse_kinematics(target_frame), ax, target=target_vector)
 
+# check if reached !
+#
+real_frame = arm.forward_kinematics(arm.inverse_kinematics(target_frame))
+print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], target_frame[:3, 3]))
+
+    
+
+
+# plot 
+#
+# plt.xlim(-SCALER, SCALER)
+# plt.ylim(-SCALER, SCALER)
+plt.show()
+
+
+
 
 # sleep(2)
 # print("showing moving arm")
 
-# new_ax = plot_utils.init_3d_figure()
 
 
 
@@ -113,9 +128,11 @@ arm.plot(arm.inverse_kinematics(target_frame), ax, target=target_vector)
 # target_frame[:3, 3] = new_target_vector
 # copy target vector 
 #
-tmp_target_vector = target_vector
+# tmp_target_vector = target_vector
 
 # new axis for the movement
+#
+# new_ax = plot_utils.init_3d_figure()
 
 
 # this loop is to see the motion when moving down to pick the mushrooms
@@ -129,16 +146,3 @@ tmp_target_vector = target_vector
 #     target_frame[:3, 3] = tmp_target_vector
 #     print("-" * 100)
 
-
-
-    
-
-
-# plot 
-#
-# plt.xlim(-SCALER, SCALER)
-# plt.ylim(-SCALER, SCALER)
-plt.show()
-
-real_frame = arm.forward_kinematics(arm.inverse_kinematics(target_frame))
-print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], target_frame[:3, 3]))
