@@ -8,9 +8,15 @@ from time import sleep
 
 
 # class as a struct for joint names
+# bounds:
+# B (0, 800),
+# L (200, 600),
+# H (0, 150),
+# M (600, 1000),
+# W (500, 900)
 #
 class Joints():
-    base = 0
+    base = 0 
     lower_elbow = 1
     higher_elbow = 2
     mid_arm = 3
@@ -62,7 +68,36 @@ class Arm():
         self.CONNECTION.center(self.JOINTS.wrist)
 
         
+    #
+    #
+    def moveJoints(self, angles=[]):
+        pass
+        print("given {} angles are {}".format(len(angles), angles))
+        
+        # if no angle was passed set to IDLE
+        # 
+        if len(angles) == 0:
+            self.IDLE()
+            return
+        
+        # send each joint the corresbonding angle
+        # TODO: maybe make an array of joints or leave this be
+        # 
+        for (id,angle) in enumerate(angles):
+            position = self.conv_angle(angle)
+            self.CONNECTION.move(ID=id, position=position, time=500)
+            
     
+    
+    # this function converts angles to possitoins 
+    # TODO: maybe move to main file not in the class
+    #
+    def conv_angle(self, angle):
+        CONV = .240
+        pos = angle / .240
+        print("pos: {}".format(pos))
+        return int(pos)
+        
     #
     #
     def IK(self, x, y, z):
