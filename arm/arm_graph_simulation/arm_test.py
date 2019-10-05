@@ -20,7 +20,7 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "base servo",
         translation_vector = [0, 0, 0], # location 
-        orientation = [0, 0, 0],
+        orientation = [ 0, 0, 0],
         rotation = [0, 0, 1],
         bounds = (math.radians(0), math.radians(192))
         # bounds = (math.radians(-192), math.radians(0))
@@ -41,7 +41,7 @@ arm = Chain(name="arm", links= [
         translation_vector = [0.25 * SCALER, 0, 0], # location
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(0), math.radians(120)) 
+        bounds = (math.radians(0), math.radians(150)) 
         # bounds = (math.radians(-28), math.radians(0))
 
         ),
@@ -81,9 +81,9 @@ ax = plot_utils.init_3d_figure()
 # the target point between -1 ~ 1 in all axis 
 # create the 
 #
-x = .3 * SCALER
-y = .3 * SCALER
-z = .0 * SCALER
+x = .0 * SCALER
+y = 2. * SCALER
+z = 0.5 * SCALER
 target_vector = [x, y, z]
 target_frame = np.eye(4)
 target_frame[:3, 3] = target_vector
@@ -92,6 +92,10 @@ target_frame[:3, 3] = target_vector
 angles = arm.inverse_kinematics(target_frame)
 for (i, angle) in enumerate(angles):
     angles[i] = math.degrees(angle) 
+    
+    if (i == 0):
+        angles[i] = angles[i] + 30 
+
     if (angles[i] > 360 ):
         angles[i] = angles[i] % 360
         
