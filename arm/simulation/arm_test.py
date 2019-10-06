@@ -31,7 +31,7 @@ arm = Chain(name="arm", links= [
         translation_vector = [0, 0, 0.85 * SCALER], # location
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(36), math.radians(144))
+        bounds = (math.radians(36), math.radians(240))
         # bounds = (math.radians(-144), math.radians(36))
 
         ),
@@ -39,9 +39,9 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "elbow hight",
         translation_vector = [0.25 * SCALER, 0, 0], # location
-        orientation = [0, 0, 0],
+        orientation = [-1, -1, 1],
         rotation = [0, 1, 0],
-        bounds = (math.radians(0), math.radians(150)) 
+        bounds = (math.radians(0), math.radians(240)) 
         # bounds = (math.radians(-28), math.radians(0))
 
         ),
@@ -78,12 +78,17 @@ ax = plot_utils.init_3d_figure()
 
 #
 
-# the target point between -1 ~ 1 in all axis 
-# create the 
+# take the coordinate of the targer
 #
-x = .0 * SCALER
-y = 2. * SCALER
-z = 0.5 * SCALER
+x_input = float(input("X: "))
+y_input = float(input("Y: "))
+z_input = float(input("Z: "))
+
+# initiate the target vector and the target frame
+#
+x = x_input #* SCALER
+y = y_input #* SCALER
+z = z_input # SCALER
 target_vector = [x, y, z]
 target_frame = np.eye(4)
 target_frame[:3, 3] = target_vector
