@@ -28,10 +28,10 @@ arm = Chain(name="arm", links= [
     
     URDFLink(
         name = "elbow low",
-        translation_vector = [0, 0, 0.85 * SCALER], # location
+        translation_vector = [0, 0, 0.95 * SCALER], # location
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(36), math.radians(240))
+        bounds = (math.radians(120), math.radians(144))
         # bounds = (math.radians(-144), math.radians(36))
 
         ),
@@ -39,9 +39,9 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "elbow hight",
         translation_vector = [0.25 * SCALER, 0, 0], # location
-        orientation = [-1, -1, 1],
+        orientation = [-1, -1, -1],
         rotation = [0, 1, 0],
-        bounds = (math.radians(0), math.radians(240)) 
+        bounds = (math.radians(0), math.radians(144)) 
         # bounds = (math.radians(-28), math.radians(0))
 
         ),
@@ -49,7 +49,7 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "middle",
         translation_vector = [0.9 * SCALER, 0, 0], # location
-        orientation = [0, 0, 0],
+        orientation = [-.7, -.7, -.7],
         rotation = [0, 1, 0],
         bounds = (math.radians(0), math.radians(240))
         # bounds = (math.radians(-144), math.radians(240))
@@ -88,7 +88,7 @@ z_input = float(input("Z: "))
 #
 x = x_input #* SCALER
 y = y_input #* SCALER
-z = z_input # SCALER
+z = z_input #* SCALER
 target_vector = [x, y, z]
 target_frame = np.eye(4)
 target_frame[:3, 3] = target_vector
@@ -100,9 +100,14 @@ for (i, angle) in enumerate(angles):
     
     if (i == 0):
         angles[i] = angles[i] + 30 
+        
+    elif (i == 3 and angles[i] == 0):  # FIXME: try and fix this 
+        angles[i] = angles[i] + 180        
+        
+        
 
-    if (angles[i] > 360 ):
-        angles[i] = angles[i] % 360
+    # if (angles[i] > 360 ):
+    #     angles[i] = angles[i] % 360
         
     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
@@ -128,10 +133,6 @@ plt.show()
 
 # sleep(2)
 # print("showing moving arm")
-
-
-
-
 
 # new_target_vector = [x, y, 0]
 # target_frame[:3, 3] = new_target_vector
