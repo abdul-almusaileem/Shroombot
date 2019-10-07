@@ -47,7 +47,7 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "middle",
         translation_vector = [0.9 * SCALER, 0, 0], # location
-        orientation = [-1, 1, -1],
+        orientation = [-.7, .7, -.7],
         rotation = [0, 1, 0],
         # maybe set the lower bound to 120 so that it doesn't point up
         #
