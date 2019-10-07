@@ -47,11 +47,11 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "middle",
         translation_vector = [0.9 * SCALER, 0, 0], # location
-        orientation = [-.7, .7, -.7],
+        orientation = [-.7, -.7, -.7],
         rotation = [0, 1, 0],
         # maybe set the lower bound to 120 so that it doesn't point up
         #
-        bounds = (math.radians(120), math.radians(240)) 
+        bounds = (math.radians(0), math.radians(240)) 
         # bounds = (math.radians(-144), math.radians(240))
         
         ),
