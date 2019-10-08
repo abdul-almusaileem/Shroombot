@@ -20,7 +20,7 @@ arm = Chain(name="arm", links= [
         translation_vector = [0, 0, 0], # location 
         orientation = [ 0, 0, 0],
         rotation = [0, 0, 1],
-        bounds = (math.radians(0), math.radians(192))
+        bounds = (math.radians(130), math.radians(240))
         # bounds = (math.radians(-192), math.radians(0))
         ),
     
@@ -29,7 +29,7 @@ arm = Chain(name="arm", links= [
         translation_vector = [0, 0, 0.95 * SCALER], # location
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(120), math.radians(144))
+        bounds = (math.radians(36), math.radians(144))
         # bounds = (math.radians(-144), math.radians(36))
 
         ),
@@ -39,15 +39,15 @@ arm = Chain(name="arm", links= [
         translation_vector = [0.25 * SCALER, 0, 0], # location
         orientation = [-1, -1, -1],
         rotation = [0, 1, 0],
-        bounds = (math.radians(0), math.radians(144)) 
-        # bounds = (math.radians(-28), math.radians(0))
+        bounds = (math.radians(36), math.radians(144)) 
+        # bounds = (math.radians(-144), math.radians(36))
 
         ),
 
     URDFLink(
         name = "middle",
         translation_vector = [0.9 * SCALER, 0, 0], # location
-        orientation = [-1, 1, -1],
+        orientation = [0, 1, 0],
         rotation = [0, 1, 0],
         # maybe set the lower bound to 120 so that it doesn't point up
         #
@@ -98,11 +98,11 @@ angles = arm.inverse_kinematics(target_frame)
 for (i, angle) in enumerate(angles):
     angles[i] = math.degrees(angle) 
     
-    if (i == 0):
-        angles[i] = angles[i] + 30 
+    # if (i == 0):
+    #     angles[i] = angles[i] - 30 
         
-    elif (i == 3 and angles[i] == 0):  # FIXME: try and fix this 
-        angles[i] = angles[i] + 180        
+    # elif (i == 3 and angles[i] == 0):  # FIXME: try and fix this 
+    #     angles[i] = angles[i] + 180        
         
         
 
@@ -121,38 +121,32 @@ print("Computed position vector : %s, original position vector : %s" % (real_fra
 
     
 
+print("-" * 80)
+sleep(2)
+
+new_target_vector = [x, y, 0]
+new_target_frame = np.eye(4)
+new_target_frame[:3, 3] = new_target_vector
+new_ax = plot_utils.init_3d_figure()
+
+angles = arm.inverse_kinematics(new_target_frame)
+for (i, angle) in enumerate(angles):
+    angles[i] = math.degrees(angle) 
+    
+    # if (i == 0):
+    #     angles[i] = angles[i] - 30 
+    
+    print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
+
+        
+arm.plot(arm.inverse_kinematics(new_target_frame), new_ax, target=new_target_frame)
+real_frame = arm.forward_kinematics(arm.inverse_kinematics(new_target_frame))
+print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], new_target_frame[:3, 3]))
+
+
 
 # plot 
 #
 # plt.xlim(-SCALER, SCALER)
 # plt.ylim(-SCALER, SCALER)
 plt.show()
-
-
-
-
-# sleep(2)
-# print("showing moving arm")
-
-# new_target_vector = [x, y, 0]
-# target_frame[:3, 3] = new_target_vector
-# copy target vector 
-#
-# tmp_target_vector = target_vector
-
-# new axis for the movement
-#
-# new_ax = plot_utils.init_3d_figure()
-
-
-# this loop is to see the motion when moving down to pick the mushrooms
-# when implementing just switch z from VALUE to zero 
-#
-# for i in range(int(tmp_target_vector[2]*10+1)):
-#     print("z = {}".format(tmp_target_vector[2]))
-#     print("The angles of each joints are : ", arm.inverse_kinematics(target_frame))
-#     arm.plot(arm.inverse_kinematics(target_frame), new_ax, target=target_frame)
-#     tmp_target_vector[2] -= 0.1
-#     target_frame[:3, 3] = tmp_target_vector
-#     print("-" * 100)
-
