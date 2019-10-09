@@ -51,8 +51,8 @@ arm = Chain(name="arm", links= [
         rotation = [0, 1, 0],
         # maybe set the lower bound to 120 so that it doesn't point up
         #
-        bounds = (math.radians(120), math.radians(240)) 
-        # bounds = (math.radians(-144), math.radians(240))
+        # bounds = (math.radians(120), math.radians(240)) 
+        bounds = (math.radians(-240), math.radians(120))
         
         ),
 
@@ -99,10 +99,11 @@ for (i, angle) in enumerate(angles):
     angles[i] = math.degrees(angle) 
     
     if (i == 2):
-        angles[i] = 240 + angles[i] 
+        angles[i] = 0 + angles[i] 
         
-    # elif (i == 3 and angles[i] == 0):  # FIXME: try and fix this 
-    #     angles[i] = angles[i] + 180        
+    elif (i == 3): 
+        
+        angles[i] = 0 + angles[i]        
     
     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
@@ -128,7 +129,9 @@ for (i, angle) in enumerate(angles):
     angles[i] = math.degrees(angle) 
     
     if (i == 2):
-        angles[i] = 240 + angles[i] 
+        angles[i] = 0 + angles[i]
+    elif (i == 3): 
+        angles[i] = 0 + angles[i]    
     
     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
