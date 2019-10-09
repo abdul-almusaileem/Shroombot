@@ -27,7 +27,7 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "elbow low",
         translation_vector = [0, 0, 0.95 * SCALER], # location
-        orientation = [0, 0, 0],
+        orientation = [0, 0, 1],
         rotation = [0, 1, 0],
         bounds = (math.radians(36), math.radians(144))
         # bounds = (math.radians(-144), math.radians(36))
@@ -36,11 +36,11 @@ arm = Chain(name="arm", links= [
     
     URDFLink(
         name = "elbow hight",
-        translation_vector = [0.25 * SCALER, 0, 0], # location
-        orientation = [-1, -1, -1],
+        translation_vector = [0, 0, 0.25 * SCALER], # location
+        orientation = [0, 2.5, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(36), math.radians(144)) 
-        # bounds = (math.radians(-144), math.radians(36))
+        # bounds = (math.radians(36), math.radians(144)) 
+        bounds = (math.radians(-144), math.radians(36))
 
         ),
 
@@ -59,7 +59,7 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "wrist",
         translation_vector = [0.55 * SCALER, 0, 0], # location
-        orientation = [0, 0, 0],
+        orientation = [0, 1, 0],
         rotation = [0, 1, 0],
         bounds = (math.radians(120), math.radians(240))
         # bounds = (math.radians(-120), math.radians(216))
@@ -98,17 +98,12 @@ angles = arm.inverse_kinematics(target_frame)
 for (i, angle) in enumerate(angles):
     angles[i] = math.degrees(angle) 
     
-    # if (i == 0):
-    #     angles[i] = angles[i] - 30 
+    if (i == 2):
+        angles[i] = 240 + angles[i] 
         
     # elif (i == 3 and angles[i] == 0):  # FIXME: try and fix this 
     #     angles[i] = angles[i] + 180        
-        
-        
-
-    # if (angles[i] > 360 ):
-    #     angles[i] = angles[i] % 360
-        
+    
     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
 
@@ -122,24 +117,23 @@ print("Computed position vector : %s, original position vector : %s" % (real_fra
     
 
 print("-" * 80)
-sleep(2)
 
 new_target_vector = [x, y, 0]
 new_target_frame = np.eye(4)
 new_target_frame[:3, 3] = new_target_vector
-new_ax = plot_utils.init_3d_figure()
+# new_ax = plot_utils.init_3d_figure()
 
 angles = arm.inverse_kinematics(new_target_frame)
 for (i, angle) in enumerate(angles):
     angles[i] = math.degrees(angle) 
     
-    # if (i == 0):
-    #     angles[i] = angles[i] - 30 
+    if (i == 2):
+        angles[i] = 240 + angles[i] 
     
     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
         
-arm.plot(arm.inverse_kinematics(new_target_frame), new_ax, target=new_target_frame)
+arm.plot(arm.inverse_kinematics(new_target_frame), ax, target=new_target_frame)
 real_frame = arm.forward_kinematics(arm.inverse_kinematics(new_target_frame))
 print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], new_target_frame[:3, 3]))
 
