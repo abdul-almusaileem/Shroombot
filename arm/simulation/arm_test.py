@@ -37,7 +37,7 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "elbow hight",
         translation_vector = [0, 0, 0.25 * SCALER], # location
-        orientation = [0, 2.5, 0],
+        orientation = [0, -2.5, 0],
         rotation = [0, 1, 0],
         # bounds = (math.radians(36), math.radians(144)) 
         bounds = (math.radians(-144), math.radians(36))
@@ -47,19 +47,19 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "middle",
         translation_vector = [0.9 * SCALER, 0, 0], # location
-        orientation = [0, 1, 0],
+        orientation = [0, 9, 0],
         rotation = [0, 1, 0],
         # maybe set the lower bound to 120 so that it doesn't point up
         #
-        # bounds = (math.radians(120), math.radians(240)) 
-        bounds = (math.radians(-240), math.radians(120))
+        bounds = (math.radians(120), math.radians(240)) 
+        # bounds = (math.radians(-240), math.radians(120))
         
         ),
 
     URDFLink(
         name = "wrist",
         translation_vector = [0.55 * SCALER, 0, 0], # location
-        orientation = [0, 1, 0],
+        orientation = [0, 5.5, 0],
         rotation = [0, 1, 0],
         bounds = (math.radians(120), math.radians(240))
         # bounds = (math.radians(-120), math.radians(216))
