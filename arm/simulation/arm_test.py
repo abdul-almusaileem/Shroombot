@@ -20,34 +20,40 @@ arm = Chain(name="arm", links= [
         translation_vector = [0, 0, 0], # location 
         orientation = [ 0, 0, 0],
         rotation = [0, 0, 1],
-        bounds = (math.radians(130), math.radians(240))
+        # bounds = (math.radians(130), math.radians(240))
         # bounds = (math.radians(-192), math.radians(0))
+        bounds = (math.radians(0), math.radians(240))
+
         ),
     
     URDFLink(
         name = "elbow low",
         translation_vector = [0, 0, 0.95 * SCALER], # location
-        orientation = [0, 0, 1],
+        orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(36), math.radians(144))
+        # bounds = (math.radians(36), math.radians(144))
         # bounds = (math.radians(-144), math.radians(36))
+        bounds = (math.radians(0), math.radians(240))
+
 
         ),
     
     URDFLink(
         name = "elbow hight",
         translation_vector = [0, 0, 0.25 * SCALER], # location
-        orientation = [0, -2.5, 0],
+        orientation = [0, 0, math.pi],
         rotation = [0, 1, 0],
-        # bounds = (math.radians(36), math.radians(144)) 
-        bounds = (math.radians(-144), math.radians(36))
+        bounds = (math.radians(0), math.radians(144)) 
+        # bounds = (math.radians(-144), math.radians(36))
+        # bounds = (math.radians(0), math.radians(240))
+        
 
         ),
 
     URDFLink(
         name = "middle",
         translation_vector = [0.9 * SCALER, 0, 0], # location
-        orientation = [0, 9, 0],
+        orientation = [0, 0, -math.pi],
         rotation = [0, 1, 0],
         # maybe set the lower bound to 120 so that it doesn't point up
         #
@@ -59,9 +65,9 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "wrist",
         translation_vector = [0.55 * SCALER, 0, 0], # location
-        orientation = [0, 5.5, 0],
+        orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(120), math.radians(240))
+        bounds = (math.radians(0), math.radians(240))
         # bounds = (math.radians(-120), math.radians(216))
         )
      
@@ -98,13 +104,18 @@ angles = arm.inverse_kinematics(target_frame)
 for (i, angle) in enumerate(angles):
     angles[i] = math.degrees(angle) 
     
-    if (i == 2):
-        angles[i] = 0 + angles[i] 
-        
-    elif (i == 3): 
-        
-        angles[i] = 0 + angles[i]        
-    
+    # brandon logic to map things one at a time by changing maps
+    #
+    if (i == 0):
+        angles[i] = 0 + angles[i]   
+    elif (i == 1): 
+        angles[i] = 0 + angles[i]          
+    elif (i == 2):
+        angles[i] = round(angles[i])
+        angles[i] = 0 + abs(angles[i]) 
+    elif (i == 3):
+        angles[i] = 0 + angles[i]          
+
     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
 
@@ -128,16 +139,24 @@ angles = arm.inverse_kinematics(new_target_frame)
 for (i, angle) in enumerate(angles):
     angles[i] = math.degrees(angle) 
     
-    if (i == 2):
-        angles[i] = 0 + angles[i]
-    elif (i == 3): 
-        angles[i] = 0 + angles[i]    
+    # brandon logic to map things one at a time by changing maps
+    #
+    if (i == 0):
+        angles[i] = 0 + angles[i]   
+    elif (i == 1): 
+        angles[i] = 0 + angles[i]          
+    elif (i == 2):
+        angles[i] = round(angles[i])
+        angles[i] = 0 + abs(angles[i]) 
+    elif (i == 3):
+        angles[i] = 0 + angles[i]          
+            
     
     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
         
-arm.plot(arm.inverse_kinematics(new_target_frame), ax, target=new_target_frame)
-real_frame = arm.forward_kinematics(arm.inverse_kinematics(new_target_frame))
+#arm.plot(arm.inverse_kinematics(new_target_frame), ax, target=new_target_frame)
+#real_frame = arm.forward_kinematics(arm.inverse_kinematics(new_target_frame))
 print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], new_target_frame[:3, 3]))
 
 
