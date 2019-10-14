@@ -22,7 +22,7 @@ arm = Chain(name="arm", links= [
         rotation = [0, 0, 1],
         # bounds = (math.radians(130), math.radians(240))
         # bounds = (math.radians(-192), math.radians(0))
-        bounds = (math.radians(50), math.radians(240))
+        #bounds = (math.radians(-360), math.radians(360))
 
         ),
     
@@ -41,7 +41,7 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "elbow hight",
         translation_vector = [0, 0, 0.25 * SCALER], # location
-        orientation = [0, 0, math.pi],
+        orientation = [0, 0, 0],
         rotation = [0, 1, 0],
         # bounds = (math.radians(36), math.radians(144)) 
         # bounds = (math.radians(-144), math.radians(36))
@@ -53,7 +53,7 @@ arm = Chain(name="arm", links= [
     URDFLink(
         name = "middle",
         translation_vector = [0.9 * SCALER, 0, 0], # location
-        orientation = [0, 0, math.pi],
+        orientation = [0, 0, 0],
         rotation = [0, 1, 0],
         # maybe set the lower bound to 120 so that it doesn't point up
         #
@@ -106,15 +106,30 @@ for (i, angle) in enumerate(angles):
     
     # brandon logic to map things one at a time by changing maps
     #
+    idle_angles = [235, 120, 36, 120, 120]
+    
+    # TODO: CHANGE TO SWITCH STATEMENT!!!!
+    #
     if (i == 0):
-        angles[i] = 45 + angles[i]   
+        pass
+        angles[i] = angles[i] + 45
+        if angles[i] > 270:
+            angles[i] = 360 - angles[i]
+        # angles[i] = abs( (idle_angles[i] - angles[i])) 
+        # angles[i] = 55 + angles[i]   
     elif (i == 1): 
-        angles[i] = -54 + angles[i]          
+        angles[i] = abs(idle_angles[i] - angles[i])
+        # angles[i] = -54 + angles[i]          
     elif (i == 2):
-        angles[i] = round(angles[i])
-        angles[i] = 30 + abs(angles[i])
+        angles[i] = abs(idle_angles[i] - angles[i])
+        # if angles[i] < 0:
+        #     angles[i] = abs(angles[i])
+        # angles[i] = round(angles[i])
+        # angles[i] = 36 + abs(angles[i]) 
     elif (i == 3):
-        angles[i] = -60 + angles[i]          
+        pass
+        angles[i] = abs(idle_angles[i] - angles[i])
+        # angles[i] = 120 + angles[i]          
 
     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 

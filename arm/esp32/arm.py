@@ -86,6 +86,8 @@ class Arm():
         for (id,angle) in enumerate(angles):
             position = self.conv_angle(angle)
             self.CONNECTION.move(ID=id, position=position, time=500)
+            sleep(0.5)
+
             
     
     
@@ -97,13 +99,7 @@ class Arm():
         pos = angle / .240
         print("pos: {}".format(pos))
         return int(pos)
-        
-    #
-    #
-    def IK(self, x, y, z):
-        pass
-        print("math ? or maybe just move to")
- 
+   
 
     # this method would send a signal to the actuator to pick the mushroom
     # this method also would read from either a pressure or a ping sensor
