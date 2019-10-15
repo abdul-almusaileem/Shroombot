@@ -13,8 +13,9 @@ def connect(ssid, password):
     if station.isconnected() == True:
         
         print("Already connected")
-        print("addr = {}".format(station.ifconfig()[0]))
-        return
+        addr = station.ifconfig()[0]
+        print("addr = {}".format(addr))
+        return addr
 
     # connect to a the network
     #
