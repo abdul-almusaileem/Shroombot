@@ -87,7 +87,7 @@ class Arm():
             position = self.conv_angle(angle)
             self.CONNECTION.move(ID=id, position=position, time=500)
             sleep(0.5)
-
+        return 1
             
     
     
