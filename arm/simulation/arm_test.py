@@ -95,6 +95,12 @@ z_input = float(input("Z: "))
 x = x_input #* SCALER
 y = y_input #* SCALER
 z = z_input #* SCALER
+if x_input < 0:
+    x = abs(x_input)
+    negx_flag = 1
+else:
+    negx_flag = 0
+
 target_vector = [x, y, z]
 target_frame = np.eye(4)
 target_frame[:3, 3] = target_vector
@@ -113,6 +119,9 @@ for (i, angle) in enumerate(angles):
     if (i == 0):
         pass
         angles[i] = angles[i] + 45
+        if(negx_flag):
+            print("it was negative")
+            angles[i] = angles[i] + 90
         if angles[i] > 270:
             angles[i] = 360 - angles[i]
         # angles[i] = abs( (idle_angles[i] - angles[i])) 
