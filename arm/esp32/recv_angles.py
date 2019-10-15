@@ -40,6 +40,7 @@ def recv_on(host, port):
             # check if no data was sent and exit
             #
             if (data == b''):
+                conn.close()
                 break
             
             # convert data from bytes to float
@@ -52,8 +53,14 @@ def recv_on(host, port):
             # if no data break
             # 
             if not data:
+                conn.close()
                 break
-            
+        
+        # close the socket
+        #
+        conn.close()
+        sock.close()
+    
         return angles
             
     
