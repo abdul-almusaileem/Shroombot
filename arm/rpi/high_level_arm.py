@@ -7,27 +7,35 @@
 # TODO: look into websockets vs sockets ?
 #
 
+import sys
+import numpy as np
+import math
+
 # 
 #
 def main():
-    # take the coordinate of the targer
-    #
-    x_input = float(input("X: "))
-    y_input = float(input("Y: "))
-    z_input = float(input("Z: "))
+   try:
+    while True:
+        # take the coordinate of the targer
+        #
+        x_input = float(input("X: "))
+        y_input = float(input("Y: "))
+        z_input = float(input("Z: "))
 
-    # ip and port for the socket connection
-    #
-    ip = "172.20.10.6"
-    port = 5001
-    
-    # 
-    #
-    arm_high_level(x = x_input, y = y_input, z = z_input, ip = ip, port = port)
-
+        # ip and port for the socket connection
+        #
+        ip = "172.20.10.6"
+        port = 5001
+        
+        # 
+        #
+        arm_high_level(x = x_input, y = y_input, z = z_input, ip = ip, port = port)
+   except KeyboardInterrupt:
+       sys.exit()
     
 
 # this is the function to be coppied to the Rpi
+# TODO: make a debug flag to have all prints
 #
 def arm_high_level(x, y, z, ip, port):
     # load modules 
@@ -35,8 +43,7 @@ def arm_high_level(x, y, z, ip, port):
     import arm_chain
     from send_angles_sockets import send_angles
     from remap import remap
-    import numpy as np
-    import math
+
     
 
     # initiate the arm chain object
