@@ -29,10 +29,10 @@ def send_angles(ip, port=5001, angles=[]):
             
     except KeyboardInterrupt:
         print("keyboard interrupt")
-        sys.exit()
+        return
     except socket.timeout as err:
         print("time out error: {}".format(err))
-        sys.exit()
+        return
     except socket.error as err:
-        print("something went wrong: {}".format(err))
-        sys.exit()
+        print("socket error something went wrong: {}".format(err))
+        return

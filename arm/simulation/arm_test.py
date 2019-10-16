@@ -7,185 +7,161 @@ import matplotlib.pyplot as plt
 from time import sleep
 import math
 
-
-SCALER = 10
-
+# create the arm using IKpy's chain constructor with URDF links
 # TODO: check length of each link could be wrong
 #
 arm = Chain(name="arm", links= [
-    # base servo
-    #
     URDFLink(
         name = "base servo",
-        translation_vector = [0, 0, 0], # location 
+        translation_vector = [0, 0, 0],
         orientation = [ 0, 0, 0],
-        rotation = [0, 0, 1],
-        # bounds = (math.radians(130), math.radians(240))
-        # bounds = (math.radians(-192), math.radians(0))
-        #bounds = (math.radians(-360), math.radians(360))
-
+        rotation = [0, 0, 1]
         ),
-    
     URDFLink(
         name = "elbow low",
-        translation_vector = [0, 0, 0.95 * SCALER], # location
+        translation_vector = [0, 0, 9.5],
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        # bounds = (math.radians(36), math.radians(144))
-        # bounds = (math.radians(-144), math.radians(36))
         bounds = (math.radians(0), math.radians(240))
-
-
         ),
-    
     URDFLink(
         name = "elbow hight",
-        translation_vector = [0, 0, 0.25 * SCALER], # location
+        translation_vector = [0, 0, 2.5],
         orientation = [0, 0, 0],
-        rotation = [0, 1, 0],
-        # bounds = (math.radians(36), math.radians(144)) 
-        # bounds = (math.radians(-144), math.radians(36))
-        # bounds = (math.radians(0), math.radians(240))
-        
-
+        rotation = [0, 1, 0]
         ),
 
     URDFLink(
         name = "middle",
-        translation_vector = [0.9 * SCALER, 0, 0], # location
+        translation_vector = [9, 0, 0],
         orientation = [0, 0, 0],
-        rotation = [0, 1, 0],
-        # maybe set the lower bound to 120 so that it doesn't point up
-        #
-        # bounds = (math.radians(120), math.radians(240)) 
-        # bounds = (math.radians(-240), math.radians(120))
-        
+        rotation = [0, 1, 0] 
         ),
 
     URDFLink(
         name = "wrist",
-        translation_vector = [0.55 * SCALER, 0, 0], # location
+        translation_vector = [5.5, 0, 0],
         orientation = [0, 0, 0],
-        rotation = [0, 1, 0],
-        # bounds = (math.radians(120), math.radians(240))
-        # bounds = (math.radians(-120), math.radians(216))
+        rotation = [0, 1, 0]
         )
      
     # ,URDFLink(
     #     name = "end effector",
-    #     translation_vector = [0.1 * SCALER, 0, 0], # location
+    #     translation_vector = [1, 0, 0],
     #     orientation = [0, 0, 0],
     #     rotation = [0, 1, 0])
 ])
 
+
 # declate the axis 
 #
-ax = plot_utils.init_3d_figure()
+AXIS = plot_utils.init_3d_figure()
 
-#
+def main():
 
-# take the coordinate of the targer
-#
-x_input = float(input("X: "))
-y_input = float(input("Y: "))
-z_input = float(input("Z: "))
-
-# initiate the target vector and the target frame
-#
-x = x_input #* SCALER
-y = y_input #* SCALER
-z = z_input #* SCALER
-if x_input < 0:
-    x = abs(x_input)
-    negx_flag = 1
-else:
-    negx_flag = 0
-
-target_vector = [x, y, z]
-target_frame = np.eye(4)
-target_frame[:3, 3] = target_vector
-
-
-angles = arm.inverse_kinematics(target_frame)
-for (i, angle) in enumerate(angles):
-    angles[i] = math.degrees(angle) 
-    
-    # brandon logic to map things one at a time by changing maps
+    # take the coordinate of the targer
     #
-    idle_angles = [235, 120, 36, 120, 120]
-    
-    # TODO: CHANGE TO SWITCH STATEMENT!!!!
+    x_input = float(input("X: "))
+    y_input = float(input("Y: "))
+    z_input = float(input("Z: "))
+
+    # initiate the target vector and the target frame
     #
-    if (i == 0):
-        pass
-        angles[i] = angles[i] + 45
-        if(negx_flag):
-            print("it was negative")
-            angles[i] = angles[i] + 90
-        if angles[i] > 270:
-            angles[i] = 360 - angles[i]
-        # angles[i] = abs( (idle_angles[i] - angles[i])) 
-        # angles[i] = 55 + angles[i]   
-    elif (i == 1): 
-        angles[i] = abs(idle_angles[i] - angles[i])
-        # angles[i] = -54 + angles[i]          
-    elif (i == 2):
-        angles[i] = abs(idle_angles[i] - angles[i])
-        # if angles[i] < 0:
-        #     angles[i] = abs(angles[i])
-        # angles[i] = round(angles[i])
-        # angles[i] = 36 + abs(angles[i]) 
-    elif (i == 3):
-        pass
-        angles[i] = abs(idle_angles[i] - angles[i])
-        # angles[i] = 120 + angles[i]          
+    x = x_input 
+    y = y_input 
+    z = z_input 
 
-    print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
+    # check if the X is negative then set the flag
+    #
+    if x_input < 0:
+        x = abs(x_input)
+        negX_flag = 1
+    else:
+        negX_flag = 0
 
+    # compute the target frame (homogeneous matrix) where the specified point is 
+    #
+    target_vector = [x, y, z]
+    target_frame = np.eye(4)
+    target_frame[:3, 3] = target_vector
 
-arm.plot(arm.inverse_kinematics(target_frame), ax, target=target_vector)
+    # compute the inverse Kinematics and store the angles for each joint
+    #
+    angles = arm.inverse_kinematics(target_frame)
 
-# check if reached !
-#
-real_frame = arm.forward_kinematics(arm.inverse_kinematics(target_frame))
-print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], target_frame[:3, 3]))
-
-    
-
-print("-" * 80)
-
-# new_target_vector = [x, y, 0]
-# new_target_frame = np.eye(4)
-# new_target_frame[:3, 3] = new_target_vector
-# # new_ax = plot_utils.init_3d_figure()
-
-# angles = arm.inverse_kinematics(new_target_frame)
-# for (i, angle) in enumerate(angles):
-#     angles[i] = math.degrees(angle) 
-    
-#     # brandon logic to map things one at a time by changing maps
-#     #
-#     if (i == 0):
-#         angles[i] = 54 + angles[i]   
-#     elif (i == 1): 
-#         angles[i] = 120 + angles[i]          
-#     elif (i == 2):
-#         angles[i] = round(angles[i])
-#         angles[i] = 36 + abs(angles[i]) 
-#     elif (i == 3):
-#         angles[i] = 120 + angles[i]       
-    
-#     print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
-
+    # for each angle of the arm
+    #
+    for (i, angle) in enumerate(angles):
+        # convert the angle from radian to degrees
+        #
+        angles[i] = math.degrees(angle) 
         
-# arm.plot(arm.inverse_kinematics(new_target_frame), ax, target=new_target_frame)
-# real_frame = arm.forward_kinematics(arm.inverse_kinematics(new_target_frame))
-# print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], new_target_frame[:3, 3]))
+        # remap each angle using Brandon's LoGic 
+        #
+        angles[i] = remap(angles=angles, id=i, negX_flag=negX_flag)
+
+        # print each angle in degrees and position
+        #
+        print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
 
+    # generate the simulation to see the arm
+    #
+    arm.plot(arm.inverse_kinematics(target_frame), AXIS, target=target_vector)
 
-# plot 
+    # compare where the end effector is with where the specified point is
+    # 
+    real_frame = arm.forward_kinematics(arm.inverse_kinematics(target_frame))
+    print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], target_frame[:3, 3]))
+
+    # show the simulation plot 
+    #
+    plt.show()
+
+
+# this function is to remap the coordinates using Brandon's lOgIc
 #
-# plt.xlim(-SCALER, SCALER)
-# plt.ylim(-SCALER, SCALER)
-plt.show()
+def remap(id=0, angles=[], negX_flag=0):
+        
+    # reference angles for Brandon's LoGic
+    # TODO: CLEAN OR FIND A WAY TO EXPLAIN
+    #
+    REF_ANGLES = [235, 120, 36, 120, 120]
+
+    if (id == 0):  
+        
+        # FIXME: not negative but very large number becomes negative when flipping 
+        # FIXME: not sure if that the right fix but this fixed the high too
+        # FIXME: this works for X = 0 but X = 1 works but technically shouldn't ?
+        #
+        print("base: {}".format(angles[id]))      
+        if(angles[id] > 240):
+            angles[id] = 100
+        
+        angles[id] = angles[id] + 45
+        
+        # check if the negative flag was set
+        #
+        if(negX_flag):
+            print("it was negative")
+            angles[id] = angles[id] + 90
+        
+        # FIXME: the angles changes here before that it's not negative
+        #    
+        if angles[id] > 270:
+            angles[id] = 360 - angles[id]
+            
+            
+    elif (id == 1): 
+        angles[id] = abs(REF_ANGLES[id] - angles[id])
+        
+    elif (id == 2):
+        angles[id] = abs(REF_ANGLES[id] - angles[id])
+      
+    elif (id == 3):
+        angles[id] = abs(REF_ANGLES[id] - angles[id])
+    
+    return angles[id]
+
+if __name__ == "__main__":
+    main()

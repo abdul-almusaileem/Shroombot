@@ -4,8 +4,14 @@
 
 import struct
 import socket
+import network
 
 def recv_on(host, port):
+
+    # wifi station to make sure it's connected
+    #
+    station = network.WLAN(network.STA_IF)
+
     
     # angles to return
     angles = []
@@ -14,6 +20,11 @@ def recv_on(host, port):
     # initiate socket 
     #
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    # set timeout for socket
+    #
+    sock.settimeout(30)
+
     
     # bind socket to ip and port
     #
@@ -26,41 +37,56 @@ def recv_on(host, port):
     while True:
         # accept connection
         #
-        conn, addr = sock.accept()
-        
-        # verify connection
-        #
-        print("{} is connected".format(addr))
-        
-        # receive data
-        #
-        while True:
-            data = conn.recv(4)
+        try:
+            conn, addr = sock.accept()
 
-            # check if no data was sent and exit
-            #
-            if (data == b''):
-                conn.close()
-                break
-            
-            # convert data from bytes to float
-            #
-            data_f = struct.unpack("f", data)[0]
-            angles.append(data_f)
-            
-            print("got: {}".format(data_f))
-            
-            # if no data break
-            # 
-            if not data:
-                conn.close()
-                break
         
-        # close the socket
-        #
-        conn.close()
-        sock.close()
-    
+            
+            # verify connection
+            #
+            print("{} is connected".format(addr))
+
+            # check if the wifi connection dies
+            #
+#            if not station.isconnected():
+ #               print("wifi is down...")
+  #              break
+            
+            # receive data
+            #
+            while True:
+                data = conn.recv(4)
+                
+                # check if no data was sent and exit
+                #
+                if (data == b''):
+                    conn.close()
+                    break
+                
+                # convert data from bytes to float
+                #
+                data_f = struct.unpack("f", data)[0]
+                angles.append(data_f)
+                
+                print("got: {}".format(data_f))
+                
+                # if no data break
+                # 
+                if not data:
+                    conn.close()
+                    break
+
+
+            # close the socket
+            #
+            conn.close()
+            sock.close()
+        except KeyboardInterrupt:
+            sock.close()
+        except OSError as err:
+            print("time out!!!")
+            sock.close()
+            
         return angles
             
     
