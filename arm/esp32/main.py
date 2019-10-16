@@ -47,24 +47,17 @@ def main():
     led = Pin(LED_PIN, Pin.OUT)
     led.value(ARM_FLAG)
     
-    sleep(1)
-    led.value(1)
-    sleep(1)
-    led.value(0)
-    sleep(1)
-    # receive first set of angles
+    # flash blue led to check
     #
-
-
+    sleep(0.5)
+    led.value(1)
+    sleep(0.5)
+    led.value(0)
+    sleep(0.5)
     
-    
+    # FIXME: find out the problem with the blue led
+    #
     while True:
-        #
-        #
-        #if station.isconnected():
-            
-            #angles = recv_on(host=HOST, port=PORT)
-
         
         # check if no wifi connection                                                   
         #
@@ -79,14 +72,12 @@ def main():
 
         else:
             wifi_led.value(1)
-            print("before")
+            
+            # turn on the LED meaning the arm is ready to receive
+            #
             led.value(ARM_FLAG)
             angles = recv_on(host=HOST, port=PORT)
-            print("after")
-            
-
-            
-            
+ 
             print("angles are = {}".format(angles))
         
             # turn off the LED meaning the arm is moving
@@ -96,17 +87,8 @@ def main():
             # move the arn
             # 
             ARM_FLAG = arm.moveJoints(angles=angles)
-        
-                
-            # turn on the LED meaning the arm is ready to receive
-            #
-            led.value(ARM_FLAG)
-        
-        # recv next set of angles if there is wifi connection
-        #
-        #if station.isconnected():
-        #    print("waiting for angles...")
-        #    angles = recv_on(host=HOST, port=PORT)
+
+  
 
 if __name__ == "__main__":
     main()

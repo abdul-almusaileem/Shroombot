@@ -13,7 +13,6 @@ def main():
     addr = None
     
     addr = connect(config.SSID, config.PASS)
-#    if addr is not None:
     led.value(1)
 
 if __name__ == '__main__':

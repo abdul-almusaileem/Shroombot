@@ -45,12 +45,6 @@ def recv_on(host, port):
             # verify connection
             #
             print("{} is connected".format(addr))
-
-            # check if the wifi connection dies
-            #
-#            if not station.isconnected():
- #               print("wifi is down...")
-  #              break
             
             # receive data
             #
