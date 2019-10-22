@@ -10,6 +10,7 @@
 import sys
 import numpy as np
 import math
+import time
 
 # 
 #
@@ -20,7 +21,7 @@ def main():
         #
         x_input = float(input("X: "))
         y_input = float(input("Y: "))
-        z_input = float(input("Z: "))
+        # z_input = float(input("Z: "))
 
         # ip and port for the socket connection
         #
@@ -29,7 +30,7 @@ def main():
         
         # 
         #
-        arm_high_level(x = x_input, y = y_input, z = z_input, ip = ip, port = port)
+        arm_high_level(x = x_input, y = y_input, ip = ip, port = port)
    except KeyboardInterrupt:
        sys.exit()
     
@@ -37,12 +38,13 @@ def main():
 # this is the function to be coppied to the Rpi
 # TODO: make a debug flag to have all prints
 #
-def arm_high_level(x, y, z, ip, port):
+def arm_high_level(x, y, ip, port):
     # load modules 
     #
     import arm_chain
     from send_angles_sockets import send_angles
-    from remap import remap
+    from recv_dist import recv_z
+    from get_angles import compute_angles
 
     
 
@@ -50,47 +52,45 @@ def arm_high_level(x, y, z, ip, port):
     #
     arm = arm_chain.arm
     
-    
-    
     # compute the target frame (homogeneous matrix) where the specified point is 
+    # TODO: Z will be hard coded as high value 
     #
-    target_vector = [x, y, z]
+    target_vector = [x, y, 10.5]
     target_frame = np.eye(4)
     target_frame[:3, 3] = target_vector
 
-    # check if the X is negative then set the flag 
-    # and take the abs value to get compute the base then reverse angle in remap
     #
-    if (x < 0):
-        x = abs(x)
-        negX_flag = 1
-    else:
-        negX_flag = 0
+    #
+    angles = compute_angles(arm, target_frame)
     
-    # compute the inverse Kinematics and store the angles for each joint
+    # send the angles to the esp32 via socket
     #
-    angles = arm.inverse_kinematics(target_frame)
+    send_angles(angles=angles, ip=ip, port=port)
     
-    # remap the coordinates for each servo using Brandon's lOgIc
-    # convert the angle from radian to degrees
-    # remap each angle using Brandon's LoGic 
-    # print each angle in degrees and position for debugging
+    # wait some time ? 
     #
-    for (i, angle) in enumerate(angles):
-        angles[i] = math.degrees(angle) 
-        angles[i] = remap(angles=angles, id=i, negX_flag=negX_flag)
-        print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
-
-    # compare where the end effector is with where the specified point is
-    # 
-    real_frame = arm.forward_kinematics(arm.inverse_kinematics(target_frame))
-    print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], target_frame[:3, 3]))
+    #time.sleep(5)
+    # rcv z from esp
+    # TODO: check if u have z or not 
+    #
+    z_received = recv_z(host="172.20.10.3", port=5002)
+    
+    print("this is the new z value {}".format(z_received))
+    
+    # recompute the angles with the new z
+    #
+    target_vector = [x, y, z_received]
+    target_frame = np.eye(4)
+    target_frame[:3, 3] = target_vector
+    angles = compute_angles(arm, target_frame)
 
 
     # send the angles to the esp32 via socket
     #
     send_angles(angles=angles, ip=ip, port=port)
     
+    
+
     
 
 

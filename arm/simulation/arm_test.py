@@ -15,41 +15,45 @@ arm = Chain(name="arm", links= [
         name = "base servo",
         translation_vector = [0, 0, 0],
         orientation = [ 0, 0, 0],
-        rotation = [0, 0, 1]
+        rotation = [0, 0, 1],
+        bounds=(math.radians(0), math.radians(180))
         ),
     URDFLink(
         name = "elbow low",
-        translation_vector = [0, 0, 9.5],
+        translation_vector = [0, 0, 8],
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds = (math.radians(0), math.radians(240))
+        bounds=(math.radians(-25), math.radians(112))
         ),
     URDFLink(
         name = "elbow hight",
         translation_vector = [0, 0, 2.5],
         orientation = [0, 0, 0],
-        rotation = [0, 1, 0]
+        rotation = [0, 1, 0],
+        bounds=(math.radians(-160), math.radians(36))
         ),
 
     URDFLink(
         name = "middle",
         translation_vector = [9, 0, 0],
         orientation = [0, 0, 0],
-        rotation = [0, 1, 0] 
+        rotation = [0, 1, 0],
+        bounds=(math.radians(-110), math.radians(110))
         ),
 
     URDFLink(
         name = "wrist",
-        translation_vector = [5.5, 0, 0],
+        translation_vector = [5.25, 0, 0],
         orientation = [0, 0, 0],
-        rotation = [0, 1, 0]
+        rotation = [0, 1, 0],
+        bounds=(math.radians(-120), math.radians(120))
         )
      
-    # ,URDFLink(
-    #     name = "end effector",
-    #     translation_vector = [1, 0, 0],
-    #     orientation = [0, 0, 0],
-    #     rotation = [0, 1, 0])
+    ,URDFLink(
+        name = "end effector",
+        translation_vector = [1, 0, 0],
+        orientation = [0, 0, 0],
+        rotation = [0, 1, 0])
 ])
 
 
@@ -95,7 +99,7 @@ def main():
         # convert the angle from radian to degrees
         #
         angles[i] = math.degrees(angle) 
-        
+                
         # remap each angle using Brandon's LoGic 
         #
         angles[i] = remap(angles=angles, id=i, negX_flag=negX_flag)
@@ -118,7 +122,7 @@ def main():
     #
     plt.show()
 
-
+ 
 # this function is to remap the coordinates using Brandon's lOgIc
 #
 def remap(id=0, angles=[], negX_flag=0):
@@ -126,42 +130,52 @@ def remap(id=0, angles=[], negX_flag=0):
     # reference angles for Brandon's LoGic
     # TODO: CLEAN OR FIND A WAY TO EXPLAIN
     #
-    REF_ANGLES = [235, 120, 36, 120, 120]
+    REF_ANGLES = [55, 120, 36, 120, 120, 120]
 
-    if (id == 0):  
+
+
+    if(id == 0):
+        angles[id] = REF_ANGLES[id] + angles[id]
+    # angles[id] = angles[id] + REF_ANGLES[id]
+    if(id != 0 and angles[id] >= 0):
+        angles[id] = REF_ANGLES[id] - abs(angles[id])
+    elif(id != 0 and angles[id] < 0):
+        angles[id] = REF_ANGLES[id] + abs(angles[id])
         
-        # FIXME: not negative but very large number becomes negative when flipping 
-        # FIXME: not sure if that the right fix but this fixed the high too
-        # FIXME: this works for X = 0 but X = 1 works but technically shouldn't ?
-        #
-        print("base: {}".format(angles[id]))      
-        if(angles[id] > 240):
-            angles[id] = 100
+
+    # if (id == 0):  
+    #     # FIXME: not negative but very large number becomes negative when flipping 
+    #     # FIXME: not sure if that the right fix but this fixed the high too
+    #     # FIXME: this works for X = 0 but X = 1 works but technically shouldn't ?
+    #     #
+    #     print("base: {}".format(angles[id]))      
+    #     # if(angles[id] > 240):
+    #     #     angles[id] = 100
         
-        angles[id] = angles[id] + 45
+    #     # angles[id] = angles[id] + 45
         
-        # check if the negative flag was set
-        #
-        if(negX_flag):
-            print("it was negative")
-            angles[id] = angles[id] + 90
+    #     # check if the negative flag was set
+    #     #
+    #     # if(negX_flag):
+    #     #     print("it was negative")
+    #     #     angles[id] = angles[id] + 90
         
-        # FIXME: the angles changes here before that it's not negative
-        #    
-        if angles[id] > 270:
-            angles[id] = 360 - angles[id]
+    #     # FIXME: the angles changes here before that it's not negative
+    #     # #    
+    #     # if angles[id] > 270:
+    #     #     angles[id] = 360 - angles[id]
             
             
-    elif (id == 1): 
-        angles[id] = abs(REF_ANGLES[id] - angles[id])
+    # elif (id == 1): 
+    #     angles[id] = angles[id]
         
-    elif (id == 2):
-        angles[id] = abs(REF_ANGLES[id] - angles[id])
+    # elif (id == 2):
+    #     angles[id] = angles[id]
       
-    elif (id == 3):
-        angles[id] = abs(REF_ANGLES[id] - angles[id])
+    # elif (id == 3):
+    #     angles[id] = angles[id]
     
-    return angles[id]
+    return abs(angles[id])
 
 if __name__ == "__main__":
     main()
