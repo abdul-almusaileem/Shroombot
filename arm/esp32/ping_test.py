@@ -11,14 +11,13 @@ def main():
     # initiate constants
     #
     SENSOR_PIN = 27
-    SOUND_SPEED = 340   # m/s    
+    INCH_FACTOR = 0.0393701 
 
     # make the signal pin as output to send the pulse
     #
     sensor = Pin(SENSOR_PIN, Pin.OUT)
     
     # clear turn off the pin to clear
-    # FIXME: change the clear time
     #
     sensor.value(0)
     time.sleep_us(5) 
@@ -43,10 +42,10 @@ def main():
     
     
     dist_mm = pulse_time * 100 // 582
-    dist_inches = dist_mm * 0.0393701 
+    dist_inches = dist_mm * INCH_FACTOR
     
     time.sleep_ms(65)
-    
+        
     print("distance {} inches".format(dist_inches))
 
 
