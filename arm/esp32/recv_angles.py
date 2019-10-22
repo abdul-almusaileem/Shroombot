@@ -73,14 +73,14 @@ def recv_on(host, port):
 
             # close the socket
             #
-            conn.close()
             sock.close()
         except KeyboardInterrupt:
             sock.close()
         except OSError as err:
             print("time out!!!")
             sock.close()
+            return(angles, '')
             
-        return angles
+        return (angles, addr)
             
     
