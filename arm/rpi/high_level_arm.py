@@ -76,14 +76,17 @@ def arm_high_level(x, y, ip, port):
     z_received = recv_z(host="172.20.10.3", port=5002)
     
     print("this is the new z value {}".format(z_received))
+
+    new_z = 10.5 - z_received
     
     # recompute the angles with the new z
     #
-    target_vector = [x, y, z_received]
+    target_vector = [x, y, new_z]
     target_frame = np.eye(4)
     target_frame[:3, 3] = target_vector
     angles = compute_angles(arm, target_frame)
 
+    time.sleep(1)
 
     # send the angles to the esp32 via socket
     #

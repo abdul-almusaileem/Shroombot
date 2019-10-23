@@ -31,7 +31,7 @@ def recv_z(host="172.20.10.3", port=5002):
                 #
                 while True:
                     data = conn.recv(1024)
-                    print("data: {}".format(data))
+                    #print("data: {}".format(data))
                     # check if no data was sent and exit
                     #
                     if (data == b''):
