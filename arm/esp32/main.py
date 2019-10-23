@@ -9,6 +9,8 @@ from arm import Arm
 from machine import Pin
 import network
 from time import sleep
+from dist_ping import get_distance
+from send_dist import send_dist
 
 # 
 #
@@ -39,6 +41,8 @@ def main():
     #
     ARM_FLAG = 1
     arm = Arm()
+    
+    Z_FLAG = 0
     
     # turn on the LED to know it's ready to recv angles
     # TODO: this is a flag that is going to be sent to the PI
@@ -76,9 +80,11 @@ def main():
             # turn on the LED meaning the arm is ready to receive
             #
             led.value(ARM_FLAG)
-            angles = recv_on(host=HOST, port=PORT)
+            angles, addr = recv_on(host=HOST, port=PORT)
  
             print("angles are = {}".format(angles))
+            
+            print("addr {}".format(addr))
         
             # turn off the LED meaning the arm is moving
             #
@@ -88,7 +94,36 @@ def main():
             # 
             ARM_FLAG = arm.moveJoints(angles=angles)
 
-  
+            # if angles is not empty flag_z = True
+            #
+            if (len(angles) > 0):
+                Z_FLAG = 1
+            else:
+                Z_FLAG = 0
+            
+            
+            # if flag_z:
+            # send Z to pi via socket
+            #
+            if Z_FLAG:
+                # 
+                #
+                num_samples = 10
+                mushroom_dist = 0
+                for _ in range(0, num_samples):
+                    mushroom_dist = mushroom_dist +  get_distance(27)
+                
+                mushroom_dist = mushroom_dist / num_samples
+                print("dist: {}".format(mushroom_dist))
+                send_dist(mushroom_dist, addr=addr[0], port=5002)
+                Z_FLAG = 0
+                
+            print("sent Z, recputing")
+            sleep(1)
+            angles, addr = recv_on(host=HOST, port=PORT)
+            ARM_FLAG = arm.moveJoints(angles=angles)
+
+            print("GOT THE THING")
 
 if __name__ == "__main__":
     main()
