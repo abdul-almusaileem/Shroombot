@@ -45,6 +45,7 @@ def arm_high_level(x, y, ip, port):
     from send_angles_sockets import send_angles
     from recv_dist import recv_z
     from get_angles import compute_angles
+    from angles_no_repl import no_repl
 
     
 
@@ -59,9 +60,13 @@ def arm_high_level(x, y, ip, port):
     target_frame = np.eye(4)
     target_frame[:3, 3] = target_vector
 
+    # TODO: uncomment when testing 
     #
+    # angles = compute_angles(arm, target_frame)
+
+    # TODO: uncomment when remaping angle by angle 
     #
-    angles = compute_angles(arm, target_frame)
+    angles = no_repl()
     
     # send the angles to the esp32 via socket
     #
