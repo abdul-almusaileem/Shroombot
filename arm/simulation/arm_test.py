@@ -49,11 +49,11 @@ arm = Chain(name="arm", links= [
         bounds=(math.radians(-120), math.radians(120))
         )
      
-    ,URDFLink(
-        name = "end effector",
-        translation_vector = [1, 0, 0],
-        orientation = [0, 0, 0],
-        rotation = [0, 1, 0])
+    # ,URDFLink(
+    #     name = "end effector",
+    #     translation_vector = [1, 0, 0],
+    #     orientation = [0, 0, 0],
+    #     rotation = [0, 1, 0])
 ])
 
 
@@ -93,6 +93,13 @@ def main():
     #
     angles = arm.inverse_kinematics(target_frame)
 
+    # raw_angles = math.degrees(sum(angles)- angles[0])
+    
+    raw_angles = 90 +  math.degrees(angles[1]) + (-1 * math.degrees(angles[2])) + (-1 * math.degrees(angles[3]))
+    
+    
+    print("sum of raw angles {}".format(raw_angles))
+    
     # for each angle of the arm
     #
     for (i, angle) in enumerate(angles):
@@ -132,7 +139,7 @@ def remap(id=0, angles=[], negX_flag=0):
     #
     REF_ANGLES = [55, 120, 36, 120, 120, 120]
 
-
+    print("{} raw: {}".format(id, angles[id]))
 
     if(id == 0):
         angles[id] = REF_ANGLES[id] + angles[id]
