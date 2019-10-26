@@ -48,9 +48,9 @@ arm = Chain(name="arm", links= [
         bounds=(math.radians(-120), math.radians(120))
         )
      
-    ,URDFLink(
-        name = "end effector",
-        translation_vector = [1, 0, 0],
-        orientation = [0, 0, 0],
-        rotation = [0, 1, 0])
+    # ,URDFLink(
+    #     name = "end effector",
+    #     translation_vector = [1, 0, 0],
+    #     orientation = [0, 0, 0],
+    #     rotation = [0, 1, 0])
 ])
