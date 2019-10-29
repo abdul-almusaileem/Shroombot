@@ -95,7 +95,7 @@ def main():
 
     # raw_angles = math.degrees(sum(angles)- angles[0])
     
-    raw_angles = 90 +  math.degrees(angles[1]) + (-1 * math.degrees(angles[2])) + (-1 * math.degrees(angles[3]))
+    raw_angles = 120 - (90 + -1 * (math.degrees(angles[1]) + (math.degrees(angles[2])) + (math.degrees(angles[3]))))
     
     
     print("sum of raw angles {}".format(raw_angles))
