@@ -16,7 +16,7 @@ arm = Chain(name="arm", links= [
         translation_vector = [0, 0, 0],
         orientation = [ 0, 0, 0],
         rotation = [0, 0, 1],
-        bounds=(math.radians(0), math.radians(180))
+        # bounds=(math.radians(0), math.radians(180))
         ),
     URDFLink(
         name = "elbow low",
