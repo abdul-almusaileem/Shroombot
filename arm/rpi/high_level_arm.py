@@ -54,7 +54,6 @@ def arm_high_level(x, y, ip, port):
     arm = arm_chain.arm
     
     # compute the target frame (homogeneous matrix) where the specified point is 
-    # TODO: Z will be hard coded as high value 
     #
     target_vector = [x, y, 10.5]
     target_frame = np.eye(4)
@@ -62,11 +61,17 @@ def arm_high_level(x, y, ip, port):
 
     # TODO: uncomment when testing 
     #
-    # angles = compute_angles(arm, target_frame)
+    angles = compute_angles(arm, target_frame)#, scan_flag=1)
 
     # TODO: uncomment when remaping angle by angle 
     #
-    angles = no_repl()
+    # angles = no_repl()
+    
+    # compare where the end effector is with where the specified point is
+    # 
+    real_frame = arm.forward_kinematics(arm.inverse_kinematics(target_frame))
+    print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], target_frame[:3, 3]))
+
     
     # send the angles to the esp32 via socket
     #
@@ -74,28 +79,53 @@ def arm_high_level(x, y, ip, port):
     
     # wait some time ? 
     #
-    #time.sleep(5)
+    time.sleep(2)
+    
     # rcv z from esp
-    # TODO: check if u have z or not 
     #
     z_received = recv_z(host="172.20.10.3", port=5002)
     
-    print("this is the new z value {}".format(z_received))
 
     new_z = 10.5 - z_received
     
+    print("this is the new z value {}".format(new_z))
+    
     # recompute the angles with the new z
     #
-    target_vector = [x, y, new_z]
-    target_frame = np.eye(4)
-    target_frame[:3, 3] = target_vector
-    angles = compute_angles(arm, target_frame)
+    new_target_vector = [x, y, new_z]
+    new_target_frame = np.eye(4)
+    new_target_frame[:3, 3] = new_target_vector
+    new_angles = compute_angles(arm, new_target_frame)#, scan_flag=1)
 
     time.sleep(1)
 
-    # send the angles to the esp32 via socket
+    # compare where the end effector is with where the specified point is
+    # 
+    real_frame = arm.forward_kinematics(arm.inverse_kinematics(new_target_frame))
+    print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], new_target_frame[:3, 3]))
+
+
+    new_coordinates = real_frame[:3, 3]
+    THRESHOLD = 0.10
+    
+    # check if the new computed coordinates are within the desired threshold 
     #
-    send_angles(angles=angles, ip=ip, port=port)
+    if (
+        ((new_coordinates[0] < (x * (1+THRESHOLD))) and new_coordinates[0] > (x * (1-THRESHOLD))) and
+        ((new_coordinates[1] < (y * (1+THRESHOLD))) and (new_coordinates[1] > (y * (1-THRESHOLD)))) and
+        ((new_coordinates[2] < (new_z * (1+THRESHOLD))) and new_coordinates[2] > (new_z * (1-THRESHOLD)))
+        ):
+        # print("new...")
+
+        # send the angles to the esp32 via socket
+        #
+        send_angles(angles=new_angles, ip=ip, port=port)
+    
+    else:
+        print("staying in old...")
+        # send old angles
+        #
+        send_angles(angles=angles, ip=ip, port=port)
     
     
 
