@@ -88,6 +88,8 @@ def arm_high_level(x, y, ip, port):
 
     new_z = 10.5 - z_received
     
+    new_z = new_z + 1
+    
     print("this is the new z value {}".format(new_z))
     
     # recompute the angles with the new z
