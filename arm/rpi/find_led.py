@@ -13,7 +13,7 @@ for i in range(1, 26):
         i == 20 or i == 25):
         continue
     GPIO.setup(i, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.output(8, GPIO.HIGH)
+    GPIO.output(i, GPIO.HIGH)
     sleep(1)
-    GPIO.output(8, GPIO.LOW) 
+    GPIO.output(i, GPIO.LOW) 
     sleep(1)
