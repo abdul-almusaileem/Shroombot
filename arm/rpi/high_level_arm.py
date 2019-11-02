@@ -21,7 +21,7 @@ def main():
             y_input = float(input("Y: "))
             # z_input = float(input("Z: "))
 
-            # ip and port for the socket connection
+            # ip of esp and port for the socket connection
             #
             ip = "10.42.0.102"
             port = 5001
