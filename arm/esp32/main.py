@@ -81,7 +81,7 @@ def main():
             #
             led.value(ARM_FLAG)
             angles, addr = recv_on(host=HOST, port=PORT)
- 
+
             print("angles are = {}".format(angles))
             
             print("addr {}".format(addr))
@@ -93,6 +93,12 @@ def main():
             # move the arn
             # 
             ARM_FLAG = arm.moveJoints(angles=angles)
+            
+                        
+            # store old angles for later after picking 
+            #
+            old_angles = angles
+            
 
             # if angles is not empty flag_z = True
             #
@@ -115,15 +121,32 @@ def main():
                 
                 mushroom_dist = mushroom_dist / num_samples
                 print("dist: {}".format(mushroom_dist))
+                
                 send_dist(mushroom_dist, addr=addr[0], port=5002)
                 Z_FLAG = 0
+                print("sent Z, recomputing...")
                 
-            print("sent Z, recputing")
+            
+            # get the angles for the new point with the Z dist
+            # then move the arm to that point 
+            # 
             sleep(1)
             angles, addr = recv_on(host=HOST, port=PORT)
             ARM_FLAG = arm.moveJoints(angles=angles)
 
+            # call arm.pick to enable suction cup and pick the mushtom
+            # TODO: find a way to know if we picked the thing up
+            # 
+            arm.pick(angles=old_angles)
             print("GOT THE THING")
+  
+            # wait some time to be sure
+            #
+            sleep(2)
+            
+            # call arm.drop to move the arm to drop basket 
+            #
+            arm.drop()
 
 if __name__ == "__main__":
     main()
