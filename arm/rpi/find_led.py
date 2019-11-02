@@ -9,6 +9,9 @@ GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
 
 for i in range(1, 26):
     print("GPI: {}".format(i))
+    if (i == 1 or i == 2 or i == 4 or i == 6 or i == 9 or i == 14 or i == 17 or
+        i == 20 or i == 25):
+        continue
     GPIO.setup(i, GPIO.OUT, initial=GPIO.LOW)
     GPIO.output(8, GPIO.HIGH)
     sleep(1)
