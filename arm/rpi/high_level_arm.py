@@ -8,32 +8,33 @@
 #
 
 import sys
-import numpy as np
-import math
-import time
 
 # 
 #
 def main():
-   try:
+  
     while True:
-        # take the coordinate of the targer
-        #
-        x_input = float(input("X: "))
-        y_input = float(input("Y: "))
-        # z_input = float(input("Z: "))
+        try:
+            # take the coordinate of the targer
+            #
+            x_input = float(input("X: "))
+            y_input = float(input("Y: "))
+            # z_input = float(input("Z: "))
 
-        # ip and port for the socket connection
-        #
-        ip = "172.20.10.6"
-        port = 5001
+            # ip and port for the socket connection
+            #
+            ip = "10.42.0.102"
+            port = 5001
+            
+            # 
+            #
+            arm_high_level(x = x_input, y = y_input, ip = ip, port = port)
         
-        # 
-        #
-        arm_high_level(x = x_input, y = y_input, ip = ip, port = port)
-   except KeyboardInterrupt:
-       sys.exit()
-    
+        except KeyboardInterrupt:
+            sys.exit()
+        except ValueError:
+            print("please enter a number")
+        continue 
 
 # this is the function to be coppied to the Rpi
 # TODO: make a debug flag to have all prints
@@ -46,7 +47,15 @@ def arm_high_level(x, y, ip, port):
     from recv_dist import recv_z
     from get_angles import compute_angles
     from angles_no_repl import no_repl
+    import numpy as np
+    import math
+    import time
+    import socket
 
+
+    # get the local ip address of the machine running the script
+    #
+    local_ip = socket.gethostbyname(socket.gethostname())
     
 
     # initiate the arm chain object
@@ -59,9 +68,9 @@ def arm_high_level(x, y, ip, port):
     target_frame = np.eye(4)
     target_frame[:3, 3] = target_vector
 
-    # TODO: uncomment when testing 
+    # compute the required angles to get to the target vector
     #
-    angles = compute_angles(arm, target_frame)#, scan_flag=1)
+    angles = compute_angles(arm, target_frame)
 
     # TODO: uncomment when remaping angle by angle 
     #
@@ -83,7 +92,7 @@ def arm_high_level(x, y, ip, port):
     
     # rcv z from esp
     #
-    z_received = recv_z(host="172.20.10.3", port=5002)
+    z_received = recv_z(host=local_ip, port=5002)
     
 
     new_z = 10.5 - z_received
