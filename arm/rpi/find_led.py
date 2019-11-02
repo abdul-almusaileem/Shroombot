@@ -8,6 +8,7 @@ GPIO.setwarnings(False) # Ignore warning for now
 GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
 
 for i in range(1, 26):
+    print("GPI: {}".format(i))
     GPIO.setup(i, GPIO.OUT, initial=GPIO.LOW)
     GPIO.output(8, GPIO.HIGH)
     sleep(1)
