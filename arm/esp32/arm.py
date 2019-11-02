@@ -4,16 +4,10 @@
 
 from servo import Servo as servo
 from time import sleep
-
+from machine import Pin
 
 
 # class as a struct for joint names
-# bounds:
-# B (0, 800),
-# L (200, 600),
-# H (0, 150),
-# M (600, 1000),
-# W (500, 900)
 #
 class Joints():
     base = 0 
@@ -24,7 +18,8 @@ class Joints():
     
     
     
-
+# this is The arm class
+#
 class Arm():
 
     # initiate used variables
@@ -34,14 +29,14 @@ class Arm():
     #
     TX_PIN = 16
     RX_PIN = 17
+    SUCTION_PIN= 33
     
     # objects
     #
     CONNECTION = servo(TX_PIN, RX_PIN)
     JOINTS = Joints()
+    SUCTION = Pin(SUCTION_PIN, Pin.OUT) 
 
-    # TODO: maybe add a dict {joint: angle} ?
-    #
 
     #
     #
@@ -49,6 +44,7 @@ class Arm():
     #    pass
         #sleep(1)
         self.IDLE()
+        self.drop()
     
     
     #
@@ -81,7 +77,6 @@ class Arm():
             return
         
         # send each joint the corresbonding angle
-        # TODO: maybe make an array of joints or leave this be
         # 
         for (id,angle) in enumerate(angles):
             position = self.conv_angle(angle)
@@ -101,21 +96,34 @@ class Arm():
         return int(pos)
    
 
-    # this method would send a signal to the actuator to pick the mushroom
-    # this method also would read from either a pressure or a ping sensor
-    # to determine whether a mushroom was picked or not
+    # turn on the suction cup  
     #
-    def pick(self):
-        pass
+    def pick(self, angles):
+        
+        # turn on the pump
+        #
+        self.SUCTION.value(0)
 
-    # this method would rotate the arm to the location of the basket
-    # then place the mushroom there 
+        # move elevate arm to z=10.5
+        #
+        self.moveJoints(angles=angles)
+
+
+    # move to drop basket and turn off the suction cup
+    # TODO: get the the angles for drop basket 
     #
     def drop(self):
-        pass    
+        
+        # move the arm to go on top of the basket
+        #   
+        
+        # turn off suction
+        #
+        self.SUCTION.value(1)
+
     
 
-    # this method was for demo purposes in the first presintaion
+    # this method was for demo purposes in the first presentation
     #
     def demo(self):
         pass 
