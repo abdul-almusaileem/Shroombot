@@ -97,7 +97,7 @@ def arm_high_level(x, y, ip, port):
 
     new_z = 10.5 - z_received
     
-    new_z = new_z + 1
+    new_z = new_z + 0.5
     
     print("this is the new z value {}".format(new_z))
     
@@ -122,9 +122,9 @@ def arm_high_level(x, y, ip, port):
     # check if the new computed coordinates are within the desired threshold 
     #
     if (
-        ((new_coordinates[0] < (x * (1+THRESHOLD))) and new_coordinates[0] > (x * (1-THRESHOLD))) and
-        ((new_coordinates[1] < (y * (1+THRESHOLD))) and (new_coordinates[1] > (y * (1-THRESHOLD)))) and
-        ((new_coordinates[2] < (new_z * (1+THRESHOLD))) and new_coordinates[2] > (new_z * (1-THRESHOLD)))
+        ((abs(new_coordinates[0]) < (abs(x) * (1+THRESHOLD))) and abs(new_coordinates[0]) > (abs(x) * (1-THRESHOLD))) and
+        ((abs(new_coordinates[1]) < (abs(y) * (1+THRESHOLD))) and abs(new_coordinates[1]) > (abs(y) * (1-THRESHOLD))) #and
+        #((new_coordinates[2] < (new_z * (1+THRESHOLD))) and new_coordinates[2] > (new_z * (1-THRESHOLD)))
         ):
         # print("new...")
 
