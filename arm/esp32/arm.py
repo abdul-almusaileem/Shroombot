@@ -36,7 +36,7 @@ class Arm():
     CONNECTION = servo(TX_PIN, RX_PIN)
     JOINTS = Joints()
     SUCTION = Pin(SUCTION_PIN, Pin.OUT) 
-
+    DROP_ANGLES = [1.87, 145, 47.62, 10, 103.38]
 
     #
     #
@@ -97,8 +97,12 @@ class Arm():
    
 
     # turn on the suction cup  
+    # TODO: get the angle to make the suction vertical to the mushrom
     #
     def pick(self, angles):
+        
+        # move the middle joint to make the suction on top of the mushrom
+        #
         
         # turn on the pump
         #
@@ -116,6 +120,7 @@ class Arm():
         
         # move the arm to go on top of the basket
         #   
+        self.moveJoints(self.DROP_ANGLES)
         
         # turn off suction
         #
