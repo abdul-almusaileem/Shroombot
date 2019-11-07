@@ -4,7 +4,7 @@ from machine import Pin
 
 def main():
     
-    #
+    # set up Pin 26 is output
     #
     LED_PIN = 26
     led = Pin(LED_PIN, Pin.OUT)
@@ -12,6 +12,8 @@ def main():
     
     addr = None
     
+    # connect to WiFi then turn on the LED
+    #
     addr = connect(config.SSID, config.PASS)
     led.value(1)
 

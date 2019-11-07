@@ -35,19 +35,22 @@ def get_distance(pin=27):
     time.sleep_us(750)
 
     
-    # make the signal pin as input to re
+    # make the signal pin as input to receive incoming pulse
     #
     sensor = Pin(SENSOR_PIN, Pin.IN)
     
+    # get time it took to receive the pulse
+    #
     pulse_time = time_pulse_us(sensor, 1)
     
-    
+    # calculate distance in inches
+    #
     dist_mm = pulse_time * 100 // 582
     dist_inches = dist_mm * INCH_FACTOR
     
+    # wait 65ms
+    #
     time.sleep_ms(65)
         
-    #print("distance {} inches".format(dist_inches))
-    
     return dist_inches
 

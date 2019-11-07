@@ -8,12 +8,8 @@ import network
 
 def recv_on(host, port):
 
-    # wifi station to make sure it's connected
+    # initiate angles list
     #
-    station = network.WLAN(network.STA_IF)
-
-    
-    # angles to return
     angles = []
     
     #
@@ -35,35 +31,29 @@ def recv_on(host, port):
     sock.listen(1)
     
     while True:
-        # accept connection
-        #
-        try:
-            conn, addr = sock.accept()
 
-        
+        try:
             
-            # verify connection
+            # accept incoming connection
             #
-            print("{} is connected".format(addr))
+            conn, addr = sock.accept()
             
-            # receive data
+            # receive data while there is a connection
             #
             while True:
                 data = conn.recv(4)
                 
-                # check if no data was sent and exit
+                # check if no data was sent and break
                 #
                 if (data == b''):
                     conn.close()
                     break
                 
-                # convert data from bytes to float
+                # convert angles from bytes to float
                 #
                 data_f = struct.unpack("f", data)[0]
                 angles.append(data_f)
-                
-                print("got: {}".format(data_f))
-                
+                                
                 # if no data break
                 # 
                 if not data:
@@ -74,6 +64,7 @@ def recv_on(host, port):
             # close the socket
             #
             sock.close()
+            
         except KeyboardInterrupt:
             sock.close()
         except OSError as err:

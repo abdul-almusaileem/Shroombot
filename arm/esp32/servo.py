@@ -12,12 +12,9 @@ class Servo:
     #
     def __init__(self, TX, RX):
         self.conn = self.uart_conn(TX, RX)
-        #self.set_id(ID)
-        #self.center(ID)
-
+  
     
-    
-    #---------------------- PUBLIC METHODS -------------------------------
+    #---------------------- PUBLIC METHODS -------------------------------#
     
     # this method takes an ID
     # to get the degree mult position with 0.24
@@ -48,15 +45,10 @@ class Servo:
         buf[8] = bytes([int(time_high)])
 
         # calculate the checksum then assign it to the
-        # TODO: make two lines ?
         #
         checksum_num = [self.checksum(buf, len(buf)-1)]
         checksum_byte = bytes(checksum_num)
         buf[9] = checksum_byte
-
-        # this print is for debuging purpose
-        #
-        #print(buf)
 
         # send the packet to the motor
         #
@@ -64,12 +56,8 @@ class Servo:
 
         end = time_mo.time()
 
-        #print(end - start)
-
-
 
     # this method is used to set the ID of each servo, 
-    # TODO: each servo should be given an ID before starting the connection
     #
     def set_id(self, ID):
         
@@ -87,28 +75,23 @@ class Servo:
         buf[5] = bytes([ID])
 
         # calculate the checksum then assign it to the
-        # TODO: make two lines ?
         #
         checksum_num = [self.checksum(buf, len(buf)-1)]
         checksum_byte = bytes(checksum_num)
         buf[6] = checksum_byte
-
-        # this print is for debuging purpose
-        #
-        #print(buf)
 
         # send the packet to the motor
         #
         self.write(buf)
 
 
-    
-    
+    # center the servo make it 120 degrees
+    #    
     def center(self, ID):
         self.move(ID, 500, 500)
     
     
-    #---------------------- PRIVATE METHODS -------------------------------
+    #---------------------- PRIVATE METHODS -------------------------------#
     
     # initiate the UART connection where it takes the TX and RX pins
     #
@@ -135,8 +118,8 @@ class Servo:
         # take the one's comp of the sum and assign it to the last byte
         #
         ibuf[maxindx] = self.ones_comp(sum)
+        
         return ibuf[maxindx]
-
 
 
     # get ones comp of an 8bit number by getting the byte
@@ -144,16 +127,16 @@ class Servo:
     #
     def ones_comp(self, num):
         byte = struct.pack('<H', num)
+        
         return (byte[0]^0xFF)
-
 
 
     # take a 16bit number and return a tuple of two bytes as high and low
     #
     def high_low_byte(self, num):
         byte = struct.pack('<H', num)
+        
         return (hex(byte[1]), hex(byte[0]))
-    
     
     
     # this method writes the buffer to the servo 
