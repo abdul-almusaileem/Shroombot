@@ -26,6 +26,7 @@ def send_angles(ip, port=5001, angles=[]):
             for angle in angles:
                 angle_data = struct.pack("f", angle)
                 sock.send(angle_data)
+    
             #sock.close()
     except KeyboardInterrupt:
         print("keyboard interrupt")

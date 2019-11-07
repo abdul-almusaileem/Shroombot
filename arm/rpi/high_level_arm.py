@@ -3,7 +3,6 @@
 # it then coputes the inverse kinematics to get the angle of each joint on the 
 # arm those angle are then sent to the esp32 via socket
 #
-# TODO: write module to load arm from to be clean 
 # TODO: look into websockets vs sockets ?
 #
 
@@ -19,7 +18,6 @@ def main():
             #
             x_input = float(input("X: "))
             y_input = float(input("Y: "))
-            # z_input = float(input("Z: "))
 
             # ip of esp and port for the socket connection
             #
@@ -28,7 +26,7 @@ def main():
             
             # 
             #
-            arm_high_level(x = x_input, y = y_input, ip = ip, port = port)
+            move_arm(x = x_input, y = y_input, ip = ip, port = port)
         
         except KeyboardInterrupt:
             sys.exit()
@@ -37,14 +35,14 @@ def main():
         continue 
 
 # this is the function to be coppied to the Rpi
-# TODO: make a debug flag to have all prints
 #
-def arm_high_level(x, y, ip, port):
+def move_arm(x, y, ip, port):
+   
     # load modules 
     #
     import arm_chain
     from send_angles_sockets import send_angles
-    from recv_dist import recv_z
+    from recv_dist import recv_dist
     from get_angles import compute_angles
     from angles_no_repl import no_repl
     import numpy as np
@@ -62,9 +60,11 @@ def arm_high_level(x, y, ip, port):
     #
     arm = arm_chain.arm
     
+    Z_HIGH = 10.5
+    
     # compute the target frame (homogeneous matrix) where the specified point is 
     #
-    target_vector = [x, y, 10.5]
+    target_vector = [x, y, Z_HIGH]
     target_frame = np.eye(4)
     target_frame[:3, 3] = target_vector
 
@@ -72,14 +72,15 @@ def arm_high_level(x, y, ip, port):
     #
     angles = compute_angles(arm, target_frame)
 
-    # TODO: uncomment when remaping angle by angle 
+    # uncomment to repl
     #
     # angles = no_repl()
     
     # compare where the end effector is with where the specified point is
     # 
     real_frame = arm.forward_kinematics(arm.inverse_kinematics(target_frame))
-    print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], target_frame[:3, 3]))
+    print("Computed position vector : %s, original position vector : %s"\
+         % (real_frame[:3, 3], target_frame[:3, 3]))
 
     
     # send the angles to the esp32 via socket
@@ -88,32 +89,34 @@ def arm_high_level(x, y, ip, port):
     
     # wait some time ? 
     #
-    time.sleep(2)
+    time.sleep(1)
     
-    # rcv z from esp
+    # rcv distance from esp
     #
-    z_received = recv_z(host=local_ip, port=5002)
+    dist = recv_dist(host=local_ip, port=5002)
     
-
-    new_z = 10.5 - z_received
+    # compute the z value from current hight
+    # then add 0.5 inches to give space
+    #
+    z = Z_HIGH - dist
+    z = z + 0.5
     
-    new_z = new_z + 0.5
-    
-    print("this is the new z value {}".format(new_z))
+    print("this is the new z value {}".format(z))
     
     # recompute the angles with the new z
     #
-    new_target_vector = [x, y, new_z]
+    new_target_vector = [x, y, z]
     new_target_frame = np.eye(4)
     new_target_frame[:3, 3] = new_target_vector
-    new_angles = compute_angles(arm, new_target_frame)#, scan_flag=1)
+    new_angles = compute_angles(arm, new_target_frame)
 
     time.sleep(1)
 
     # compare where the end effector is with where the specified point is
     # 
     real_frame = arm.forward_kinematics(arm.inverse_kinematics(new_target_frame))
-    print("Computed position vector : %s, original position vector : %s" % (real_frame[:3, 3], new_target_frame[:3, 3]))
+    print("Computed position vector : %s, original position vector : %s" \
+        % (real_frame[:3, 3], new_target_frame[:3, 3]))
 
 
     new_coordinates = real_frame[:3, 3]
@@ -121,26 +124,22 @@ def arm_high_level(x, y, ip, port):
     
     # check if the new computed coordinates are within the desired threshold 
     #
-    if (
-        ((abs(new_coordinates[0]) < (abs(x) * (1+THRESHOLD))) and abs(new_coordinates[0]) > (abs(x) * (1-THRESHOLD))) and
+    if (((abs(new_coordinates[0]) < (abs(x) * (1+THRESHOLD))) and abs(new_coordinates[0]) > (abs(x) * (1-THRESHOLD))) and
         ((abs(new_coordinates[1]) < (abs(y) * (1+THRESHOLD))) and abs(new_coordinates[1]) > (abs(y) * (1-THRESHOLD))) #and
-        #((new_coordinates[2] < (new_z * (1+THRESHOLD))) and new_coordinates[2] > (new_z * (1-THRESHOLD)))
+        #((new_coordinates[2] < (z * (1+THRESHOLD))) and new_coordinates[2] > (z * (1-THRESHOLD)))
         ):
-        # print("new...")
-
+        
         # send the angles to the esp32 via socket
         #
         send_angles(angles=new_angles, ip=ip, port=port)
     
     else:
-        print("staying in old...")
         # send old angles
         #
         send_angles(angles=angles, ip=ip, port=port)
-    
-    
+        print("staying in old...")
 
-    
+
 
 
 if __name__ == "__main__":

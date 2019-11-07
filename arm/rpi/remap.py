@@ -3,10 +3,9 @@ import math
 
 # this function is to remap the coordinates using Brandon's lOgIc
 #
-def remap(id=0, angles=[]):#, scan_flag=1):
+def remap(id=0, angles=[]):
 
     # reference angles for Brandon's LoGic
-    # TODO: CLEAN OR FIND A WAY TO EXPLAIN
     #
     REF_ANGLES = [55, 120, 36, 120, 120, 120]
 

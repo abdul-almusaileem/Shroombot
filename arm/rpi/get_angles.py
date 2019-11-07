@@ -2,7 +2,7 @@
 
 #
 #
-def compute_angles(arm, target_frame):#, scan_flag):
+def compute_angles(arm, target_frame):
     from remap import remap
     import math 
     
@@ -20,7 +20,7 @@ def compute_angles(arm, target_frame):#, scan_flag):
     # print each angle in degrees and position for debugging
     #
     for i in range(4, -1, -1):
-        angles[i] = remap(angles=angles, id=i)#, scan_flag=scan_flag)
+        angles[i] = remap(angles=angles, id=i)
         print("angle({}) = {} deg, {} pos".format(i, angles[i], int(angles[i]/0.24)))
 
     return angles 

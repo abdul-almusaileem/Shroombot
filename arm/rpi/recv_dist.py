@@ -6,7 +6,7 @@ import socket
 import struct
 import sys
 
-def recv_z(host="172.20.10.3", port=5002):
+def recv_dist(host="172.20.10.3", port=5002):
     #
     #
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -15,11 +15,16 @@ def recv_z(host="172.20.10.3", port=5002):
         sock.listen(1)
         sock.settimeout(30)
 
+        # initiate z distance 
+        # 
+        dist = 0
+    
         #
         while True:
-            #accept connection
-            #
+
             try:
+                #accept connection
+                #
                 conn, addr = sock.accept()
                 
 
@@ -27,11 +32,13 @@ def recv_z(host="172.20.10.3", port=5002):
                 #
                 print("{} is connected".format(addr))
                 
-                # receive data
-                #
                 while True:
+                    
+                    
+                    # receive data
+                    #
                     data = conn.recv(1024)
-                    #print("data: {}".format(data))
+                    
                     # check if no data was sent and exit
                     #
                     if (data == b''):
@@ -39,9 +46,9 @@ def recv_z(host="172.20.10.3", port=5002):
                         sock.close()
                         break
                     
-                    # convert data from bytes to float
+                    # convert distance from bytes to float
                     #
-                    dist_z = struct.unpack("f", data)[0]
+                    dist = struct.unpack("f", data)[0]
                     
                     # if no data break
                     # 
@@ -51,8 +58,8 @@ def recv_z(host="172.20.10.3", port=5002):
                         break
                     
             except OSError as err:
-                print("time out!!!")
+                print(err)
                 sock.close()
                 break
                 
-    return dist_z 
+    return dist
