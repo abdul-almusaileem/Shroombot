@@ -140,6 +140,10 @@ def move_arm(x, y, ip, port):
         print("staying in old...")
 
 
+    # TODO: find a way to know that the arm is now at drop!
+    #
+    time.sleep(10)
+
 
 
 if __name__ == "__main__":
