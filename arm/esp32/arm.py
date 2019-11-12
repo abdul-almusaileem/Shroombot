@@ -42,7 +42,6 @@ class Arm():
     #
     #
     def __init__(self):
-        self.IDLE()
         sleep(0.5)
         self.drop()
     
@@ -52,18 +51,18 @@ class Arm():
     def IDLE(self):
         pass
         sleep(0.5)
-        self.CONNECTION.move(self.JOINTS.base, 600, 500)
-        sleep(0.5)
-        self.CONNECTION.center(self.JOINTS.lower_elbow)
-        sleep(0.5)
-        self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 500)
+        self.CONNECTION.center(self.JOINTS.wrist)
         sleep(0.5)
         self.CONNECTION.move(self.JOINTS.mid_arm, 900, 500)
         sleep(0.5)
-        self.CONNECTION.center(self.JOINTS.wrist)
+        self.CONNECTION.move(self.JOINTS.higher_elbow, 150, 500)
+        sleep(0.5)
+        self.CONNECTION.center(self.JOINTS.lower_elbow)
+        sleep(0.5)
+        self.CONNECTION.move(self.JOINTS.base, 600, 500)
 
         
-    #
+    # TODO: reorder joint movements 
     #
     def moveJoints(self, angles=[]):
         pass        
