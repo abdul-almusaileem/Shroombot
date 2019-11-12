@@ -117,7 +117,7 @@ def main():
                 num_samples = 10
                 mushroom_dist = 0
                 for _ in range(0, num_samples):
-                    mushroom_dist = mushroom_dist +  get_distance(27)
+                    mushroom_dist = mushroom_dist +  get_distance(pin=27)
                 
                 mushroom_dist = mushroom_dist / num_samples
                 print("dist: {}".format(mushroom_dist))

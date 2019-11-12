@@ -14,6 +14,7 @@ def send_dist(z, addr="172.20.10.3", port=5002):
     # 
     try:
         sock.connect((addr, port))
+        print("connected!!!!")
     
         # pack the value the send it via the socket
         #
