@@ -93,7 +93,7 @@ def move_arm(x, y, ip, port):
     
     # rcv distance from esp
     #
-    dist = recv_dist(host=local_ip, port=5002)
+    dist = recv_dist(host="10.42.0.1", port=6666)
     
     # compute the z value from current hight
     # then add 0.5 inches to give space
