@@ -13,13 +13,13 @@ def recv_dist(host="172.20.10.3", port=5002):
 
         sock.bind((host, port))
         sock.listen(1)
-        sock.settimeout(30)
+        
+        #sock.settimeout(30)
 
         # initiate z distance 
         # 
         dist = 0
     
-        #
         while True:
 
             try:
