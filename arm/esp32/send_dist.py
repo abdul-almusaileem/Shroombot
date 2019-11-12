@@ -13,6 +13,7 @@ def send_dist(z, addr="172.20.10.3", port=5002):
     # connect to the given ip
     # 
     try:
+        print("trying to connect to {} : {}".format(addr, port))
         sock.connect((addr, port))
         print("connected!!!!")
     

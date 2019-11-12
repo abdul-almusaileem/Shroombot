@@ -122,7 +122,7 @@ def main():
                 mushroom_dist = mushroom_dist / num_samples
                 print("dist: {}".format(mushroom_dist))
                 
-                send_dist(mushroom_dist, addr=addr[0], port=5002)
+                send_dist(mushroom_dist, addr=addr[0], port=6666)
                 Z_FLAG = 0
                 print("sent Z, recomputing...")
                 
