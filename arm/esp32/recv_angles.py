@@ -33,11 +33,9 @@ def recv_on(host, port):
     while True:
 
         try:
-            
             # accept incoming connection
             #
             conn, addr = sock.accept()
-            
             # receive data while there is a connection
             #
             while True:
