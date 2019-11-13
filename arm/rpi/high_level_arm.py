@@ -32,7 +32,7 @@ def main():
             sys.exit()
         except ValueError:
             print("please enter a number")
-        continue 
+            continue 
 
 # this is the function to be coppied to the Rpi
 #
@@ -52,11 +52,14 @@ def move_arm(x, y, ip, port):
     import netifaces as ni
 
 
-
     # get the local ip address of the machine running the script
     #
-    local_ip = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
-    
+    if('en1' in ni.interfaces()):
+        local_ip = ni.ifaddresses('en1')[ni.AF_INET][0]['addr']
+    else:
+        local_ip = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+        
+    print("ip is {}".format(local_ip))
 
     # initiate the arm chain object
     #
