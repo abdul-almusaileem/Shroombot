@@ -48,12 +48,14 @@ def move_arm(x, y, ip, port):
     import numpy as np
     import math
     import time
-    import socket
+    # import socket
+    import netifaces as ni
+
 
 
     # get the local ip address of the machine running the script
     #
-    local_ip = socket.gethostbyname(socket.gethostname())
+    local_ip = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
     
 
     # initiate the arm chain object
@@ -93,7 +95,7 @@ def move_arm(x, y, ip, port):
     
     # rcv distance from esp
     #
-    dist = recv_dist(host="10.42.0.1", port=6666)
+    dist = recv_dist(host=local_ip, port=6666)
     
     # compute the z value from current hight
     # then add 0.5 inches to give space
