@@ -21,7 +21,6 @@ def recv_on(host, port):
     #
     # sock.settimeout(30)
 
-    
     # bind socket to ip and port
     #
     sock.bind((host, port))

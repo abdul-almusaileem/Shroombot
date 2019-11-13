@@ -15,6 +15,7 @@ def send_angles(ip, port=5001, angles=[]):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             # connect to the specified ip and port
             #
+            print("trying to connect to {} {}".format(ip, port))
             sock.connect((ip, port))
             
             # declare connection
