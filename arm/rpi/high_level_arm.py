@@ -104,7 +104,7 @@ def move_arm(x, y, ip, port):
     # then add 0.5 inches to give space
     #
     z = Z_HIGH - dist
-    z = z + 0.5
+    z = z + 0.25
     
     print("this is the new z value {}".format(z))
     
