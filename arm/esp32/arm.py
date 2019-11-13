@@ -91,6 +91,8 @@ class Arm():
         # turn on the pump
         #
         self.SUCTION.value(0)
+        
+        sleep(3)
 
         # move elevate arm to z=10.5
         #
