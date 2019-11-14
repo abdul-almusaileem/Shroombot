@@ -3,53 +3,23 @@
 # it then coputes the inverse kinematics to get the angle of each joint on the 
 # arm those angle are then sent to the esp32 via socket
 #
-# TODO: look into websockets vs sockets ?
+# load modules 
 #
+import sys   
+import numpy as np
+import time
+import netifaces as ni
+import arm_chain
+from send_angles_sockets import send_angles
+from recv_dist import recv_dist
+from get_angles import compute_angles
+from angles_no_repl import no_repl
+# import socket
+#import math
 
-import sys
-
-# 
 #
-def main():
-  
-    while True:
-        try:
-            # take the coordinate of the targer
-            #
-            x_input = float(input("X: "))
-            y_input = float(input("Y: "))
-
-            # ip of esp and port for the socket connection
-            #
-            ip = "10.42.0.102"
-            port = 5001
-            
-            # 
-            #
-            move_arm(x = x_input, y = y_input, ip = ip, port = port)
-        
-        except KeyboardInterrupt:
-            sys.exit()
-        except ValueError:
-            print("please enter a number")
-            continue 
-
-# this is the function to be coppied to the Rpi
 #
 def move_arm(x, y, ip, port):
-   
-    # load modules 
-    #
-    import arm_chain
-    from send_angles_sockets import send_angles
-    from recv_dist import recv_dist
-    from get_angles import compute_angles
-    from angles_no_repl import no_repl
-    import numpy as np
-    import math
-    import time
-    # import socket
-    import netifaces as ni
 
 
     # get the local ip address of the machine running the script
@@ -149,7 +119,4 @@ def move_arm(x, y, ip, port):
     #
     time.sleep(10)
 
-
-
-if __name__ == "__main__":
-    main()
+    return 1
