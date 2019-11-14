@@ -39,8 +39,8 @@ def main():
                 x = float(shroom_posission[0])
                 y = float(shroom_posission[1])
                 flag = move_arm(x=x, y=y, ip=ESP_IP, port=PORT)
-                
-                time.sleep(1)
+                print("picked??")
+                # time.sleep(2)
             
     
     except KeyboardInterrupt:

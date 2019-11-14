@@ -117,6 +117,6 @@ def move_arm(x, y, ip, port):
 
     # TODO: find a way to know that the arm is now at drop!
     #
-    time.sleep(10)
+    time.sleep(15)
 
     return 1
