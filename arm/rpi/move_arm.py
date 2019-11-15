@@ -95,13 +95,13 @@ def move_arm(x, y, ip, port):
 
 
     new_coordinates = real_frame[:3, 3]
-    THRESHOLD = 0.10
+    THRESHOLD = 0.30
     
     # check if the new computed coordinates are within the desired threshold 
     #
     if (((abs(new_coordinates[0]) < (abs(x) * (1+THRESHOLD))) and abs(new_coordinates[0]) > (abs(x) * (1-THRESHOLD))) and
-        ((abs(new_coordinates[1]) < (abs(y) * (1+THRESHOLD))) and abs(new_coordinates[1]) > (abs(y) * (1-THRESHOLD))) #and
-        #((new_coordinates[2] < (z * (1+THRESHOLD))) and new_coordinates[2] > (z * (1-THRESHOLD)))
+        ((abs(new_coordinates[1]) < (abs(y) * (1+THRESHOLD))) and abs(new_coordinates[1]) > (abs(y) * (1-THRESHOLD))) and
+        (abs(new_coordinates[2]) < (abs(z) * (1+THRESHOLD))) and abs(new_coordinates[2]) > (abs(z) * (1-THRESHOLD))
         ):
         
         # send the angles to the esp32 via socket
