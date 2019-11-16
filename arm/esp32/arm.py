@@ -64,8 +64,17 @@ class Arm():
         
         # send each joint the corresbonding angle
         # 
-        for (id,angle) in enumerate(angles):
-            position = self.conv_angle(angle)
+        # for (id,angle) in enumerate(angles):
+        #     position = self.conv_angle(angle)
+        #     self.CONNECTION.move(ID=id, position=position, time=500)
+        #     sleep(0.5)
+        
+        self.CONNECTION.move(ID=self.JOINTS.base, 
+                             position=self.conv_angle(angles[0]),
+                             time=700)
+        sleep(0.05)
+        for id in range(4, 0, -1):
+            position = self.conv_angle(angles[id])
             self.CONNECTION.move(ID=id, position=position, time=500)
             sleep(0.5)
             
