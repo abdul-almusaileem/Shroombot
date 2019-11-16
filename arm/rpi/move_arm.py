@@ -14,6 +14,7 @@ from send_angles_sockets import send_angles
 from recv_dist import recv_dist
 from get_angles import compute_angles
 from angles_no_repl import no_repl
+from threshold import threshold
 # import socket
 #import math
 
@@ -84,7 +85,9 @@ def move_arm(x, y, ip, port):
     new_target_frame = np.eye(4)
     new_target_frame[:3, 3] = new_target_vector
     new_angles = compute_angles(arm, new_target_frame)
-
+    
+    # wait some time ? 
+    #
     time.sleep(1)
 
     # compare where the end effector is with where the specified point is
@@ -95,15 +98,13 @@ def move_arm(x, y, ip, port):
 
 
     new_coordinates = real_frame[:3, 3]
-    THRESHOLD = 0.30
+    WINDOW = 1.50
+    flag = threshold(real=[x, y, z], computed=new_coordinates, window=WINDOW)
     
     # check if the new computed coordinates are within the desired threshold 
     #
-    if (((abs(new_coordinates[0]) < (abs(x) * (1+THRESHOLD))) and abs(new_coordinates[0]) > (abs(x) * (1-THRESHOLD))) and
-        ((abs(new_coordinates[1]) < (abs(y) * (1+THRESHOLD))) and abs(new_coordinates[1]) > (abs(y) * (1-THRESHOLD))) and
-        (abs(new_coordinates[2]) < (abs(z) * (1+THRESHOLD))) and abs(new_coordinates[2]) > (abs(z) * (1-THRESHOLD))
-        ):
-        
+    if (flag):
+
         # send the angles to the esp32 via socket
         #
         send_angles(angles=new_angles, ip=ip, port=port)
