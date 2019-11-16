@@ -6,7 +6,6 @@ from move_arm import move_arm
 #
 def main():
   
-
     try:
         # ip of esp and port for the socket connection
         #
@@ -15,15 +14,7 @@ def main():
         FILE_NAME = "shroom_coordinates.txt"
         SHROOMS = []
         
-        # take the coordinate of the targer
-        #
-        # x_input = float(input("X: "))
-        # y_input = float(input("Y: "))
-            
-        # move the arm to the given coordinate
-        #
-        # move_arm(x = x_input, y = y_input, ip = ESP_IP, port = PORT)
-
+       
         # read the lines from the file
         # remove '\n' from each line then split the into two array
         # convert the coordinates into floats
