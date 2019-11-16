@@ -23,7 +23,7 @@ arm = Chain(name="arm", links= [
         translation_vector = [0, 0, 8],
         orientation = [0, 0, 0],
         rotation = [0, 1, 0],
-        bounds=(math.radians(-25), math.radians(90))
+        bounds=(math.radians(-25), math.radians(25))
         ),
     URDFLink(
         name = "elbow hight",
@@ -77,11 +77,11 @@ def main():
 
     # check if the X is negative then set the flag
     #
-    if x_input < 0:
-        x = abs(x_input)
-        negX_flag = 1
-    else:
-        negX_flag = 0
+    # if x_input < 0:
+    #     # x = abs(x_input)
+    #     negX_flag = 1
+    # else:
+    #     negX_flag = 0
 
     # compute the target frame (homogeneous matrix) where the specified point is 
     #
@@ -109,7 +109,7 @@ def main():
                 
         # remap each angle using Brandon's LoGic 
         #
-        angles[i] = remap(angles=angles, id=i, negX_flag=negX_flag)
+        angles[i] = remap(angles=angles, id=i)
 
         # print each angle in degrees and position
         #
@@ -132,7 +132,7 @@ def main():
  
 # this function is to remap the coordinates using Brandon's lOgIc
 #
-def remap(id=0, angles=[], negX_flag=0):
+def remap(id=0, angles=[]):
         
     # reference angles for Brandon's LoGic
     # TODO: CLEAN OR FIND A WAY TO EXPLAIN
@@ -148,39 +148,6 @@ def remap(id=0, angles=[], negX_flag=0):
         angles[id] = REF_ANGLES[id] - abs(angles[id])
     elif(id != 0 and angles[id] < 0):
         angles[id] = REF_ANGLES[id] + abs(angles[id])
-        
-
-    # if (id == 0):  
-    #     # FIXME: not negative but very large number becomes negative when flipping 
-    #     # FIXME: not sure if that the right fix but this fixed the high too
-    #     # FIXME: this works for X = 0 but X = 1 works but technically shouldn't ?
-    #     #
-    #     print("base: {}".format(angles[id]))      
-    #     # if(angles[id] > 240):
-    #     #     angles[id] = 100
-        
-    #     # angles[id] = angles[id] + 45
-        
-    #     # check if the negative flag was set
-    #     #
-    #     # if(negX_flag):
-    #     #     print("it was negative")
-    #     #     angles[id] = angles[id] + 90
-        
-    #     # FIXME: the angles changes here before that it's not negative
-    #     # #    
-    #     # if angles[id] > 270:
-    #     #     angles[id] = 360 - angles[id]
-            
-            
-    # elif (id == 1): 
-    #     angles[id] = angles[id]
-        
-    # elif (id == 2):
-    #     angles[id] = angles[id]
-      
-    # elif (id == 3):
-    #     angles[id] = angles[id]
     
     return abs(angles[id])
 
