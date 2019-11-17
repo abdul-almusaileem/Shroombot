@@ -75,7 +75,7 @@ class Arm():
         sleep(0.05)
         for id in range(4, 0, -1):
             position = self.conv_angle(angles[id])
-            self.CONNECTION.move(ID=id, position=position, time=500)
+            self.CONNECTION.move(ID=id, position=position, time=700)
             sleep(0.5)
             
         return 1
