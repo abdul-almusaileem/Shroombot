@@ -11,7 +11,7 @@ def main():
         #
         ESP_IP = "10.42.0.102"
         PORT = 5001
-        FILE_NAME = "shroom_coordinates.txt"
+        FILE_PATH = "shroom_coordinates.txt"
         SHROOMS = []
         
        
