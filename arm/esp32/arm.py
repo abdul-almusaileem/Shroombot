@@ -54,29 +54,41 @@ class Arm():
         
     # TODO: reorder joint movements 
     #
-    def moveJoints(self, angles=[]):
-        pass        
-        # if no angles ware passed set to IDLE
-        # 
-        if len(angles) == 0:
-            self.IDLE()
-            return
+    def moveJoints(self, angles=[], flag=0):
         
-        # send each joint the corresbonding angle
-        # 
-        # for (id,angle) in enumerate(angles):
-        #     position = self.conv_angle(angle)
-        #     self.CONNECTION.move(ID=id, position=position, time=500)
-        #     sleep(0.5)
-        
-        self.CONNECTION.move(ID=self.JOINTS.base, 
-                             position=self.conv_angle(angles[0]),
-                             time=700)
-        sleep(0.05)
-        for id in range(4, 0, -1):
-            position = self.conv_angle(angles[id])
-            self.CONNECTION.move(ID=id, position=position, time=700)
-            sleep(0.5)
+        if(flag == 0):        
+            # if no angles ware passed set to IDLE
+            # 
+            if len(angles) == 0:
+                self.IDLE()
+                return
+            
+            # send each joint the corresbonding angle
+            # 
+            # for (id,angle) in enumerate(angles):
+            #     position = self.conv_angle(angle)
+            #     self.CONNECTION.move(ID=id, position=position, time=500)
+            #     sleep(0.5)
+            
+            self.CONNECTION.move(ID=self.JOINTS.base, 
+                                position=self.conv_angle(angles[0]),
+                                time=700)
+            sleep(0.05)
+            for id in range(4, 0, -1):
+                position = self.conv_angle(angles[id])
+                self.CONNECTION.move(ID=id, position=position, time=700)
+                sleep(0.5)
+            
+        else:
+            print("Going backwards")
+            for id in range(1, 5):
+                position = self.conv_angle(angles[id])
+                self.CONNECTION.move(ID=id, position=position, time=700)
+                sleep(0.5)
+            
+            self.CONNECTION.move(ID=self.JOINTS.base, 
+            position=self.conv_angle(angles[0]),
+            time=700)
             
         return 1
             
@@ -105,7 +117,7 @@ class Arm():
 
         # move elevate arm to z=10.5
         #
-        self.moveJoints(angles=angles)
+        self.moveJoints(angles=angles, flag=1)
 
 
     # move to drop basket and turn off the suction cup
