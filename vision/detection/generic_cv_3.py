@@ -50,7 +50,7 @@ for contour in contours:
 
 #draw contours onto image
 mask2 = cv.drawContours(new_img,contour_list,-1,(255,0,0),10)
-
+cv.imwrite("Image_masked.jpg", mask2)
 #find center of rectangles (pixels)
 #try:
 for c in contour_list:
@@ -59,11 +59,11 @@ for c in contour_list:
     #these are the pixel location of center of rectangle
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
-    print str(cX) + " " + str(cY)
+    print( str(cX) + " " + str(cY))
     # draw the contour and center of the shape on the image
     cv.putText(mask2, "center", (cX - 20, cY - 20),
     cv.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv.LINE_AA)
 #except:
 #    print("error:no object detected")
 
-cv.imwrite("Image.jpg", mask2)
+cv.imwrite("Image_marked.jpg", mask2)
