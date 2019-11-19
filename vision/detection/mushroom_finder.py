@@ -59,7 +59,7 @@ def detect_mushroom():
         # coords = str(a) + " " + str(b) + "\n"
         # coord_list.append(coords)
 
-        print("X: " +  str(a)  + " Y: " + str(b))
+        # print("X: " +  str(a)  + " Y: " + str(b))
         # Draw the circumference of the circle. 
         cv2.circle(gray_blurred, (a, b), r, (0, 255, 0), 2) 
   
