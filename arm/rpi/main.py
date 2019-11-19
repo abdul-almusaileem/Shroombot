@@ -32,8 +32,8 @@ def main():
 
                 x = float(shroom_posission[0])
                 y = float(shroom_posission[1])
-                x = x - CAMERA_X_SHIFT
-                y = y - CAMERA_Y_SHIFT
+               # x = x - CAMERA_X_SHIFT
+               # y = y - CAMERA_Y_SHIFT
                 flag = move_arm(x=x, y=y, ip=ESP_IP, port=PORT)
                 print("picked??")
             

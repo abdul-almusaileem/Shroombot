@@ -83,16 +83,18 @@ def move_arm(x, y, ip, port):
 
     # to fix the suction cup offset
     #
-    theta = math.atan(y / x)
+    try:
+        theta = math.atan(y / x)
+    except ZeroDivisionError as err:
+        theta = 0
     hyp = math.sqrt(x**2 + y**2)
     shifted_hyp = hyp - 0.5
     
     shifted_x = shifted_hyp * math.cos(theta)
-    shifted_y = shifted_hyp * math.sin(theta)
-    
+    shifted_y = shifted_hyp * math.sin(theta) 
     # recompute the angles with the new z
     #
-    new_target_vector = [x, y, z]
+    new_target_vector = [shifted_x, shifted_y, z]
     new_target_frame = np.eye(4)
     new_target_frame[:3, 3] = new_target_vector
     new_angles = compute_angles(arm, new_target_frame)
