@@ -8,6 +8,7 @@
 import sys   
 import numpy as np
 import time
+import math
 import netifaces as ni
 import arm_chain
 from send_angles_sockets import send_angles
@@ -15,7 +16,8 @@ from recv_dist import recv_dist
 from get_angles import compute_angles
 from angles_no_repl import no_repl
 from threshold import threshold
-
+# import socket
+#import math
 
 #
 #
@@ -78,6 +80,16 @@ def move_arm(x, y, ip, port):
     
     print("this is the new z value {}".format(z))
     
+
+    # to fix the suction cup offset
+    #
+    theta = math.atan(y / x)
+    hyp = math.sqrt(x**2 + y**2)
+    shifted_hyp = hyp - 0.5
+    
+    shifted_x = shifted_hyp * math.cos(theta)
+    shifted_y = shifted_hyp * math.sin(theta)
+    
     # recompute the angles with the new z
     #
     new_target_vector = [x, y, z]
@@ -103,6 +115,7 @@ def move_arm(x, y, ip, port):
     # check if the new computed coordinates are within the desired threshold 
     #
     if (flag):
+
 
         # send the angles to the esp32 via socket
         #
