@@ -75,7 +75,7 @@ def move_arm(x, y, ip, port):
     # then add 0.5 inches to give space
     #
     z = Z_HIGH - dist
-    z = z + 0
+    z = z + (-0.7)
     
     print("this is the new z value {}".format(z))
     
@@ -98,7 +98,7 @@ def move_arm(x, y, ip, port):
 
 
     new_coordinates = real_frame[:3, 3]
-    WINDOW = 1.50
+    WINDOW = 0.75
     flag = threshold(real=[x, y, z], computed=new_coordinates, window=WINDOW)
     
     # check if the new computed coordinates are within the desired threshold 
