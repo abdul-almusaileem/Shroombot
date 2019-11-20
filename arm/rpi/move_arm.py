@@ -76,7 +76,7 @@ def move_arm(x, y, ip, port):
     # then add 0.5 inches to give space
     #
     z = Z_HIGH - dist
-    z = z + (-0.7)
+    z = z + (-0.9)
     
     print("this is the new z value {}".format(z))
     
@@ -85,13 +85,15 @@ def move_arm(x, y, ip, port):
     #
     try:
         theta = math.atan(y / x)
+        hyp = math.sqrt(x**2 + y**2)
+        shifted_hyp = hyp - 0.5
+        
+        shifted_x = shifted_hyp * math.cos(theta)
+        shifted_y = shifted_hyp * math.sin(theta) 
     except ZeroDivisionError as err:
-        theta = 0
-    hyp = math.sqrt(x**2 + y**2)
-    shifted_hyp = hyp - 0.5
-    
-    shifted_x = shifted_hyp * math.cos(theta)
-    shifted_y = shifted_hyp * math.sin(theta) 
+        shifted_x = x
+        shifted_y = y 
+  
     # recompute the angles with the new z
     #
     new_target_vector = [shifted_x, shifted_y, z]
@@ -112,7 +114,7 @@ def move_arm(x, y, ip, port):
 
     new_coordinates = real_frame[:3, 3]
     WINDOW = 0.75
-    flag = threshold(real=[x, y, z], computed=new_coordinates, window=WINDOW)
+    flag = threshold(real=[shifted_x, shifted_y, z], computed=new_coordinates, window=WINDOW)
     
     # check if the new computed coordinates are within the desired threshold 
     #
