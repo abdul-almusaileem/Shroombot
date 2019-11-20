@@ -86,7 +86,7 @@ def move_arm(x, y, ip, port):
     try:
         theta = math.atan(y / x)
         hyp = math.sqrt(x**2 + y**2)
-        shifted_hyp = hyp - 0.5
+        shifted_hyp = hyp - 0.25
         
         shifted_x = shifted_hyp * math.cos(theta)
         shifted_y = shifted_hyp * math.sin(theta) 
