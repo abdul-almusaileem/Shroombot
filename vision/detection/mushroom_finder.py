@@ -7,6 +7,11 @@ def detect_mushroom():
   PHYSICAL_X = 22  # inches
   PHYSICAL_Y = 22
 
+SHITTY_POINTS = [[9, 8], [11, 7], [11, 8], [8, 9], [12, 7], [8, 8], [13, 7], [12, 8], [14, 8], [15, 8], [15, 7], [16, 8]]
+
+X_SHIFT = 9.2
+Y_SHIFT = 7.5
+
 
   capture_duration = 5
   cv2.namedWindow("preview")
@@ -75,23 +80,41 @@ def detect_mushroom():
     if cv2.waitKey(1) & 0xFF == ord('q'):
       break
 
-  # List Processing #
-  unique_coord = np.unique(coords_list_np, axis=0)
-  for index in range(len(unique_coord)):
-    if index == 0:
-      final_coord = np.array(unique_coord[index, :])
+
+# (8.3, 8.3) always shows up
+# List Processing #
+unique_coord = np.unique(coords_list_np, axis=0)
+#print(unique_coord)
+for index in range(len(unique_coord)):
+  if [round(unique_coord[index, 0]), round(unique_coord[index, 1])] in SHITTY_POINTS:
+    continue
+  if index == 0:
+    final_coord = np.array(unique_coord[index, :])
+  else:
+    target_x = unique_coord[index-1, 0]
+    target_y = unique_coord[index-1, 1]
+    comp_x = unique_coord[index, 0]
+    comp_y = unique_coord[index, 1]
+    if target_x * 0.9 < comp_x < target_x * 1.1 and target_y * 0.9 < comp_y < target_y * 1.1:
+      # Do Nothing
+      pass
     else:
-      target_x = unique_coord[index-1, 0]
-      target_y = unique_coord[index-1, 1]
-      comp_x = unique_coord[index, 0]
-      comp_y = unique_coord[index, 1]
-      if target_x * 0.9 < comp_x < target_x * 1.1 and target_y * 0.9 < comp_y < target_y * 1.1:
-        # Do Nothing
-        pass
-      else:
-        final_coord = np.row_stack((final_coord, unique_coord[index, :]))
-  final_coord = final_coord[1:, :]
-  #  return(final_coord)
+      final_coord = np.row_stack((final_coord, unique_coord[index, :]))
+final_coord = final_coord[1:, :]
+#rint(final_coord)
+
+
+shifted_output = []
+
+for point in final_coord:
+  tmp = []
+  tmp.append(point[0] - X_SHIFT)
+  tmp.append(point[1] + Y_SHIFT)
+  shifted_output.append(tmp)
+
+print("original {}".format(final_coord))
+print("shifted {}".format(shifted_output))
+
 
   vc.release()
 

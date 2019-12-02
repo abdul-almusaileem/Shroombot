@@ -1,10 +1,16 @@
 import cv2
 import numpy as np
 import time
+import math
 
 PHYSICAL_X = 22  # inches
 #21.75
 PHYSICAL_Y = 22
+
+SHITTY_POINTS = [[9, 8], [11, 7], [11, 8], [8, 9], [12, 7], [8, 8], [13, 7], [12, 8], [14, 8], [15, 8], [15, 7], [16, 8]]
+
+X_SHIFT = 9.2
+Y_SHIFT = 7.5
 
 
 capture_duration = 5
@@ -12,6 +18,10 @@ cv2.namedWindow("preview")
 vc = cv2.VideoCapture(0)
 
 rval, frame = vc.read()
+
+# flip 
+#
+#cv2.flip( frame, 0)
 
 coord_list = []
 coords_list_np = np.array([0, 0])
@@ -38,13 +48,19 @@ while (int(time.time() - start_time) < capture_duration):
 
 # Apply Hough transform on the blurred image. 
     detected_circles = cv2.HoughCircles(gray_blurred,  
-                                        cv2.HOUGH_GRADIENT, 1, minDist=500, param1 = 50, 
-                                        param2 = 30, minRadius = 10, maxRadius = 60) 
+                                        cv2.HOUGH_GRADIENT,
+                                        1,
+                                        minDist=500,
+                                        param1 = 50, 
+                                        param2 = 30,
+                                        minRadius = 10,
+                                        maxRadius = 60)
 #param 1 50
 #param 2 30  
-# Draw circles that are detected. 
+# Draw circles that are detected.
+
     if detected_circles is not None: 
-  
+      
     # Convert the circle parameters a, b and r to integers. 
       detected_circles = np.uint16(np.around(detected_circles)) 
   
@@ -65,6 +81,9 @@ while (int(time.time() - start_time) < capture_duration):
         # Draw a small circle (of radius 1) to show the center. 
         cv2.circle(gray_blurred, (a, b), 1, (0, 0, 255), 3)    
 
+        # flip after drawing
+        #
+     #   fliped_image =  cv2.flip(gray_blurred, 0)
 
     cv2.imshow("preview", gray_blurred)
   
@@ -74,9 +93,13 @@ while (int(time.time() - start_time) < capture_duration):
   if cv2.waitKey(1) & 0xFF == ord('q'):
     break
 
+# (8.3, 8.3) always shows up
 # List Processing #
 unique_coord = np.unique(coords_list_np, axis=0)
+#print(unique_coord)
 for index in range(len(unique_coord)):
+  if [round(unique_coord[index, 0]), round(unique_coord[index, 1])] in SHITTY_POINTS:
+    continue
   if index == 0:
     final_coord = np.array(unique_coord[index, :])
   else:
@@ -90,9 +113,19 @@ for index in range(len(unique_coord)):
     else:
       final_coord = np.row_stack((final_coord, unique_coord[index, :]))
 final_coord = final_coord[1:, :]
-print(final_coord)
+#rint(final_coord)
 
-#
+
+shifted_output = []
+
+for point in final_coord:
+  tmp = []
+  tmp.append(point[0] - X_SHIFT)
+  tmp.append(point[1] + Y_SHIFT)
+  shifted_output.append(tmp)
+
+print("original {}".format(final_coord))
+print("shifted {}".format(shifted_output))
 
 
 #final_coords = []
