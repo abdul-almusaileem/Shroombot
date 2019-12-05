@@ -7,7 +7,9 @@ PHYSICAL_X = 22  # inches
 #21.75
 PHYSICAL_Y = 22
 
-SHITTY_POINTS = [[9, 8], [11, 7], [11, 8], [8, 9], [12, 7], [8, 8], [13, 7], [12, 8], [14, 8], [15, 8], [15, 7], [16, 8]]
+#SHITTY_POINTS = [[9, 8], [11, 7], [11, 8], [8, 9], [12, 7], [8, 8], [13, 7], [12, 8], [14, 8], [15, 8], [15, 7], [16, 8]]
+
+SHITTY_POINTS =[[6, 6], [7, 3], [7, 6], [8, 4], [8, 7], [8, 6], [9, 6], [10, 5], [27, 3], [27, 14], [6, 5], [6, 7], [6, 3], [7, 7], [8, 3], [11, 5], [7, 5], [7, 4], [9, 7]]
 
 X_SHIFT = 9.2
 Y_SHIFT = 7.5
@@ -44,10 +46,13 @@ while (int(time.time() - start_time) < capture_duration):
     # Bitwise-AND mask and original image
     res = cv2.bitwise_and(frame,frame, mask= mask)
 # Blur using 3 * 3 kernel. 
-    gray_blurred = cv2.blur(gray, (3, 3)) 
+    gray_blurred = cv2.blur(gray, (3, 3))
+
+    #flipped_image =  cv2.flip(gray_blurred, 0)
+    #flipped_image =  cv2.flip(flipped_image, 1)
 
 # Apply Hough transform on the blurred image. 
-    detected_circles = cv2.HoughCircles(gray_blurred,  
+    detected_circles = cv2.HoughCircles(gray_blurred,
                                         cv2.HOUGH_GRADIENT,
                                         1,
                                         minDist=500,
@@ -86,6 +91,7 @@ while (int(time.time() - start_time) < capture_duration):
      #   fliped_image =  cv2.flip(gray_blurred, 0)
 
     cv2.imshow("preview", gray_blurred)
+#    cv2.imshow("preview", flipped_image)
   
 
   rval, frame = vc.read()
